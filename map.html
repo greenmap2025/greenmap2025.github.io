@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>永續消費地圖</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{font-family:'Noto Sans TC',sans-serif;background:#f8f9fa;color:#333;}
+        nav {
+            background: rgba(27, 94, 32, 0.95);
+            backdrop-filter: blur(10px);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,.15);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .logo { font-size: 1.7rem; font-weight: bold; display: flex; align-items: center; gap: .5rem; }
+        .logo i { color: #8bc34a; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: .6rem 1.4rem;
+            border-radius: 50px;
+            transition: .3s;
+            font-size: .95rem;
+        }
+        .nav-links a:hover { background: #43A047; transform: translateY(-2px); }
+        .container{max-width:1400px;margin:2rem auto;padding:0 1rem;display:grid;grid-template-columns:1fr 400px;gap:1.5rem;}
+        @media(max-width:992px){.container{grid-template-columns:1fr;}}
+        .controls{grid-column:1/3;background:white;padding:1.5rem;border-radius:12px;box-shadow:0 3px 15px rgba(0,0,0,.1);display:flex;flex-wrap:wrap;gap:1rem;align-items:center;}
+        .search-box{flex:1;min-width:250px;}
+        .search-box input{width:100%;padding:12px 16px;border:2px solid #a5d6a7;border-radius:12px;font-size:1rem;}
+        .filter-group{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;}
+        select{padding:.8rem 1.2rem;background:#e9f5e9;border-radius:50px;font-weight:bold;border:none;cursor:pointer;font-size:.95rem;min-width:120px;}
+        select:focus{outline:2px solid #43A047;}
+        .fav-btn-control{padding:.8rem 1.5rem;background:#43A047;color:white;border-radius:50px;font-weight:bold;border:none;cursor:pointer;font-size:.95rem;min-width:120px;}
+        .fav-btn-control:hover{background:#388E3C;}
+        .map-container{height:650px;border:3px solid #43A047;border-radius:16px;overflow:hidden;box-shadow:0 8px 25px rgba(0,0,0,.15);}
+        iframe{width:100%;height:100%;border:0;}
+        .store-list{background:white;border-radius:16px;box-shadow:0 5px 20px rgba(0,0,0,.08);max-height:650px;overflow-y:auto;padding:1rem;}
+        .store-item{padding:1rem;border-bottom:1px solid #eee;border-radius:8px;margin-bottom:.5rem;transition:background .2s;cursor:pointer;position:relative;}
+        .store-item:hover{background:#e8f5e9;}
+        .store-name{
+            font-weight:bold;color:#1B5E20;font-size:1.1rem;margin-bottom:.3rem;
+            cursor:pointer;text-decoration:underline;
+        }
+        .store-name:hover{color:#43A047;}
+        .store-district{
+            font-size:.8rem;
+            background:#d0e8d0;
+            color:#1B5E20;
+            padding:.25rem .6rem;
+            border-radius:50px;
+            display:inline-block;
+            margin:.3rem 0;
+            font-weight:600;
+        }
+        .store-city-tag{
+            font-size:.7rem;
+            background:#1B5E20;
+            color:white;
+            padding:.15rem .5rem;
+            border-radius:50px;
+            margin-left:.5rem;
+            font-weight:600;
+        }
+        .store-address{font-size:.9rem;color:#666;margin:.3rem 0;}
+        .store-advantages{font-size:.9rem;color:#2e7d32;margin:.3rem 0;line-height:1.6;}
+        .fav-btn{
+            position:absolute;top:12px;right:12px;
+            background:#f0f0f0;color:#666;
+            padding:.4rem .8rem;border:none;border-radius:8px;
+            cursor:pointer;font-size:.9rem;transition:all .2s;
+            font-weight:600;
+        }
+        .fav-btn.favorited{
+            background:#43A047 !important;color:white !important;
+        }
+        .fav-btn:hover{opacity:.8;}
+        .loading{text-align:center;padding:3rem;color:#666;font-size:1.1rem;}
+        footer{text-align:center;padding:3rem;background:#1B5E20;color:white;margin-top:3rem;}
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo"><i class="fas fa-leaf"></i> 永續消費地圖</div>
+        <div class="nav-links">
+            <a href="index.html"><i class="fas fa-home"></i> 首頁</a>
+            <a href="map.html"><i class="fas fa-map-marked-alt"></i> 探索地圖</a>
+            <a href="forum.html"><i class="fas fa-comments"></i> 交流台</a>
+        </div>
+    </nav>
+
+<div class="container">
+    <div class="controls">
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="搜尋店名、地址、區域或特點..." onkeyup="filterStores()">
+        </div>
+        <div class="filter-group">
+            <select id="citySelect" onchange="switchCity(this.value)">
+                <option value="新北">新北</option>
+                <option value="台北">台北</option>
+            </select>
+            <select id="districtSelect" onchange="switchDistrict(this.value)">
+                <option value="全部">全部區域</option>
+            </select>
+            <button class="fav-btn-control" id="favButton" onclick="toggleFavorites()">
+                我的收藏 (<span id="favCount">0</span>)
+            </button>
+        </div>
+    </div>
+
+    <div class="map-container">
+        <iframe id="map-iframe" src="https://www.google.com/maps/d/embed?mid=1RVjjiUNbpJe9YEcP2Gxj9OpDNMYVVVQ&ehbc=2E312F" allowfullscreen loading="lazy"></iframe>
+    </div>
+
+    <div class="store-list" id="storeList">
+        <div class="loading">載入中…</div>
+    </div>
+</div>
+
+<footer><p>高三專題製作｜永續消費地圖團隊 © 2025</p></footer>
+
+<script>
+    const SHEET_ID = '1uu_D_9cqpv80o8QpCQmzByiilTzU1BKyKnPi5cFjMzA';
+    const CITY_SHEETS = {
+        '新北': '環保餐廳-新北',
+        '台北': '台北'
+    };
+    const MAP_URLS = {
+        '新北': 'https://www.google.com/maps/d/embed?mid=1RVjjiUNbpJe9YEcP2Gxj9OpDNMYVVVQ&ehbc=2E312F',
+        '台北': 'https://www.google.com/maps/d/embed?mid=1n6Kw17wazzDD76EZPZXKUebU2hB8XkU&ehbc=2E312F'
+    };
+
+    let currentCity = '新北';
+    let currentDistrict = '全部';
+    let showFavorites = false;
+    let allStores = [];
+    let allStoresGlobal = [];
+
+    // === 收藏功能 ===
+    function getFavorites() { return JSON.parse(localStorage.getItem('favStores') || '[]'); }
+    function saveFavorites(arr) { localStorage.setItem('favStores', JSON.stringify(arr)); }
+    function toggleFav(name, button) {
+        let fav = getFavorites();
+        if (fav.includes(name)) {
+            fav = fav.filter(n => n !== name);
+            button.classList.remove('favorited');
+            button.innerHTML = 'Heart';
+        } else {
+            fav.push(name);
+            button.classList.add('favorited');
+            button.innerHTML = 'Heart';
+        }
+        saveFavorites(fav);
+        updateFavCount();
+        if (showFavorites) renderStoreList();
+    }
+
+    function updateFavCount() {
+        const count = getFavorites().length;
+        document.getElementById('favCount').innerText = count;
+    }
+
+    // === CSV 解析 ===
+    function parseCSVLine(line) {
+        const result = [];
+        let current = '';
+        let inQuotes = false;
+        for (let i = 0; i < line.length; i++) {
+            const char = line[i];
+            if (char === '"') inQuotes = !inQuotes;
+            else if (char === ',' && !inQuotes) {
+                result.push(current.trim().replace(/^"|"$/g, ''));
+                current = '';
+            } else current += char;
+        }
+        result.push(current.trim().replace(/^"|"$/g, ''));
+        return result;
+    }
+
+    // === Google Maps 跳轉功能 ===
+    function openGoogleMaps(address, storeName) {
+        if (!address || address === '無地址') {
+            alert(`「${storeName}」沒有提供地址，無法導航`);
+            return;
+        }
+        // 自動補台灣
+        let query = address;
+        if (!query.includes('台灣') && !query.includes('Taiwan')) {
+            query = '台灣 ' + query;
+        }
+        const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
+        window.open(url, '_blank');
+    }
+
+    // === 載入資料 ===
+    async function loadStores(city) {
+        const sheetName = CITY_SHEETS[city] || CITY_SHEETS['新北'];
+        const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(sheetName)}`;
+        
+        try {
+            const res = await fetch(CSV_URL, { cache: 'no-cache' });
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const txt = await res.text();
+            const lines = txt.split('\n').slice(1).filter(l => l.trim());
+
+            const stores = lines.map(l => {
+                const v = parseCSVLine(l);
+                return {
+                    name:       v[0] || '未知店家',
+                    address:    v[1] || '無地址',
+                    district:   (v[2] || '未知區域').trim().replace(/區$/g, ''),
+                    advantages: v[3] || '無優點',
+                    city:       city
+                };
+            });
+
+            allStores = stores;
+            allStoresGlobal = allStoresGlobal.filter(s => s.city !== city);
+            allStoresGlobal = allStoresGlobal.concat(stores);
+
+            updateDistrictDropdown();
+            updateFavCount();
+            renderStoreList();
+        } catch(e) {
+            console.error('載入失敗:', e);
+            document.getElementById('storeList').innerHTML = `
+                <div class="loading" style="color:#d32f2f;">
+                    載入失敗！<br>工作表：<strong>${sheetName}</strong><br>
+                    請確認權限正確<br>
+                    <small>錯誤：${e.message}</small>
+                </div>`;
+        }
+    }
+
+    function updateDistrictDropdown() {
+        const select = document.getElementById('districtSelect');
+        const districts = [...new Set(allStores.map(s => s.district).filter(d => d && d !== '未知區域'))];
+        select.innerHTML = `<option value="全部">全部區域</option>`;
+        districts.sort().forEach(d => {
+            select.innerHTML += `<option value="${d}">${d}</option>`;
+        });
+    }
+
+    function renderStoreList() {
+        let list = [];
+        if (showFavorites) {
+            const favs = getFavorites();
+            list = allStoresGlobal.filter(s => favs.includes(s.name));
+            if (list.length === 0) {
+                document.getElementById('storeList').innerHTML = '<div class="loading">尚未收藏任何店家</div>';
+                return;
+            }
+        } else {
+            list = allStores;
+            if (currentDistrict !== '全部') {
+                list = list.filter(s => s.district === currentDistrict);
+            }
+        }
+
+        const favs = getFavorites();
+        const html = list.map(s => `
+            <div class="store-item">
+                <div class="store-name" onclick="openGoogleMaps('${s.address.replace(/'/g, "\\'")}', '${s.name.replace(/'/g, "\\'")}')">
+                    ${s.name}
+                    ${showFavorites ? `<span class="store-city-tag">${s.city}</span>` : ''}
+                </div>
+                <div class="store-district">${s.district}</div>
+                <div class="store-address">${s.address}</div>
+                <div class="store-advantages">${s.advantages}</div>
+                <button class="fav-btn ${favs.includes(s.name)?'favorited':''}" 
+                        onclick="event.stopPropagation(); toggleFav('${s.name.replace(/'/g, "\\'")}', this)">
+                    ${favs.includes(s.name)?'Heart':'Heart'}
+                </button>
+            </div>
+        `).join('');
+        document.getElementById('storeList').innerHTML = html || '<div class="loading">無符合資料</div>';
+    }
+
+    function filterStores() {
+        const q = document.getElementById('searchInput').value.toLowerCase();
+        const filtered = allStores.filter(s =>
+            s.name.toLowerCase().includes(q) ||
+            s.address.toLowerCase().includes(q) ||
+            s.district.toLowerCase().includes(q) ||
+            s.advantages.toLowerCase().includes(q)
+        );
+        const favs = getFavorites();
+        document.getElementById('storeList').innerHTML = filtered.map(s => `
+            <div class="store-item">
+                <div class="store-name" onclick="openGoogleMaps('${s.address.replace(/'/g, "\\'")}', '${s.name.replace(/'/g, "\\'")}')">
+                    ${s.name}
+                </div>
+                <div class="store-district">${s.district}</div>
+                <div class="store-address">${s.address}</div>
+                <div class="store-advantages">${s.advantages}</div>
+                <button class="fav-btn ${favs.includes(s.name)?'favorited':''}" 
+                        onclick="event.stopPropagation(); toggleFav('${s.name.replace(/'/g, "\\'")}', this)">
+                    ${favs.includes(s.name)?'Heart':'Heart'}
+                </button>
+            </div>
+        `).join('') || '<div class="loading">無符合資料</div>';
+    }
+
+    function switchCity(city) {
+        currentCity = city;
+        document.getElementById('citySelect').value = city;
+        document.getElementById('map-iframe').src = MAP_URLS[city] || MAP_URLS['新北'];
+        loadStores(city);
+        currentDistrict = '全部';
+        document.getElementById('districtSelect').value = '全部';
+        showFavorites = false;
+        document.getElementById('favButton').style.background = '#43A047';
+    }
+
+    function switchDistrict(district) {
+        currentDistrict = district;
+        renderStoreList();
+    }
+
+    function toggleFavorites() {
+        showFavorites = !showFavorites;
+        const btn = document.getElementById('favButton');
+        btn.style.background = showFavorites ? '#388E3C' : '#43A047';
+        renderStoreList();
+    }
+
+    // 初始化
+    loadStores('新北');
+</script>
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>永續消費交流台</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+    <style>
+        :root { --primary: #43A047; --light: #E8F5E9; --bg: #F8FDF8; --text: #2E7D32; --shadow: 0 8px 25px rgba(0,0,0,0.08); --transition: all 0.3s ease; }
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{font-family:'Noto Sans TC',sans-serif;background:linear-gradient(135deg, #E8F5E9 0%, #F8FDF8 100%);color:var(--text);min-height:100vh;}
+        
+        /* 統一導覽列 */
+        nav{background: #1B5E20;color:white;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:1000;box-shadow:0 4px 20px rgba(0,0,0,.1);}
+        .logo{font-size:1.8rem;font-weight:700;display:flex;align-items:center;gap:10px;}
+        .logo img{width:32px;height:32px;filter:brightness(0) invert(1);}
+        .nav-links a{color:white;text-decoration:none;margin-left:1.5rem;font-weight:500;position:relative;transition:var(--transition);}
+        .nav-links a:hover{color:#C8E6C9;}
+        .nav-links a::after{content:'';position:absolute;bottom:-5px;left:0;width:0;height:2px;background:#C8E6C9;transition:var(--transition);}
+        .nav-links a:hover::after{width:100%;}
+        .user-name{font-weight:600;color:#C8E6C9;}
+
+        .container{max-width:900px;margin:2rem auto;padding:0 1rem;}
+        .post-form{background:white;padding:2rem;border-radius:20px;box-shadow:var(--shadow);margin-bottom:2rem;}
+        .post-form h2{font-size:1.5rem;color:var(--primary);margin-bottom:1rem;}
+        .post-form input, .post-form textarea{width:100%;padding:12px 16px;border:2px solid #A5D6A7;border-radius:12px;margin-bottom:1rem;font-size:1rem;outline:none;transition:var(--transition);}
+        .post-form input:focus, .post-form textarea:focus{border-color:var(--primary);}
+        .post-form button{background:var(--primary);color:white;padding:12px 28px;border:none;border-radius:50px;font-weight:600;cursor:pointer;font-size:1rem;transition:var(--transition);}
+        .post-form button:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(67,160,71,.3);}
+
+        .user-setting{background:white;padding:2rem;border-radius:20px;box-shadow:var(--shadow);margin-bottom:2rem;}
+        .user-setting h2{font-size:1.5rem;color:var(--primary);margin-bottom:1rem;}
+
+        .post-list{background:white;border-radius:20px;box-shadow:var(--shadow);padding:1.5rem;overflow-y:auto;max-height:calc(100vh - 300px);}
+        .post-item{padding:1.8rem;border-bottom:1px solid #eee;transition:var(--transition);border-radius:14px;margin-bottom:1rem;background:#fff;}
+        .post-item:hover{background:#f8fff8;transform:translateY(-3px);box-shadow:0 6px 18px rgba(0,0,0,.08);}
+        .post-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:.8rem;}
+        .post-title{font-weight:700;color:var(--primary);font-size:1.25rem;cursor:pointer;}
+        .post-title:hover{color:#388E3C;}
+        .post-meta{font-size:.85rem;color:#666;display:flex;align-items:center;gap:8px;}
+        .post-content{line-height:1.8;color:#444;margin:1rem 0;display:none;}
+        .post-content.show{display:block;}
+        .replies{margin-top:1rem;padding-left:1.5rem;border-left:3px solid var(--light);display:none;}
+        .replies.show{display:block;}
+        .reply{padding:1rem;background:#f9f9f9;border-radius:10px;margin-bottom:.8rem;box-shadow:0 2px 6px rgba(0,0,0,.05);}
+        .reply-header{font-size:.9rem;color:#666;margin-bottom:.4rem;}
+        .reply-content{line-height:1.6;color:#444;}
+        .reply-form{margin-top:1rem;display:flex;gap:8px;}
+        .reply-form input{flex:1;padding:10px;border:2px solid #A5D6A7;border-radius:10px;outline:none;}
+        .reply-form button{background:#388E3C;color:white;padding:10px 18px;border:none;border-radius:10px;cursor:pointer;font-weight:500;}
+
+        .loading{text-align:center;padding:3rem;color:#666;font-size:1.1rem;}
+        footer{text-align:center;padding:2.5rem;background:var(--primary);color:white;margin-top:3rem;font-size:.9rem;}
+    </style>
+</head>
+<body>
+
+<!-- 統一導覽列 -->
+<nav>
+    <div class="logo">
+        <img src="https://i.imgur.com/leaf-logo.png" alt="葉子">
+        永續消費地圖
+    </div>
+    <div class="nav-links">
+        <a href="index.html">首頁</a>
+        <a href="map.html">探索地圖</a>
+        <a href="forum.html">交流台</a>
+    </div>
+    <span class="user-name" id="userName"></span>
+</nav>
+
+<div class="container">
+
+    <div class="user-setting">
+        <h2>設定你的暱稱</h2>
+        <input type="text" id="userInput" placeholder="輸入你的暱稱">
+        <button onclick="setUserName()">儲存</button>
+    </div>
+
+    <div class="post-form">
+        <h2>分享你的永續心得</h2>
+        <input type="text" id="postTitle" placeholder="標題（如：萬華這家超推！）">
+        <textarea id="postContent" rows="4" placeholder="寫下你的發現、問題或推薦..."></textarea>
+        <button onclick="addPost()">發布貼文</button>
+    </div>
+
+    <div class="post-list" id="postList">
+        <div class="loading">載入中...</div>
+    </div>
+</div>
+
+<footer><p>高三專題製作｜永續消費交流台 © 2025</p></footer>
+
+<script>
+    // 使用者登入狀態
+    let userName = localStorage.getItem('userName') || '訪客';
+    document.getElementById('userName').innerText = userName;
+    document.getElementById('userInput').value = userName;
+
+    function setUserName() {
+        const name = document.getElementById('userInput').value.trim();
+        if (!name) {
+            alert('請輸入有效的暱稱！');
+            return;
+        }
+        userName = name;
+        localStorage.setItem('userName', name);
+        document.getElementById('userName').innerText = name;
+        alert('暱稱已更新！');
+    }
+
+    // 貼文系統
+    function getPosts() { return JSON.parse(localStorage.getItem('forumPosts') || '[]'); }
+    function savePosts(posts) { localStorage.setItem('forumPosts', JSON.stringify(posts)); }
+
+    function addPost() {
+        const title = document.getElementById('postTitle').value.trim();
+        const content = document.getElementById('postContent').value.trim();
+        if (!title || !content) return alert('請填寫標題與內容！');
+        
+        const posts = getPosts();
+        posts.unshift({
+            id: Date.now(),
+            title,
+            content,
+            author: userName,
+            date: new Date().toLocaleString('zh-TW'),
+            replies: []
+        });
+        savePosts(posts);
+        
+        document.getElementById('postTitle').value = '';
+        document.getElementById('postContent').value = '';
+        renderPosts();
+    }
+
+    function addReply(postId) {
+        const input = document.getElementById(`reply-${postId}`);
+        const reply = input.value.trim();
+        if (!reply) return;
+        
+        const posts = getPosts();
+        const post = posts.find(p => p.id === postId);
+        post.replies.push({
+            content: reply,
+            author: userName,
+            date: new Date().toLocaleString('zh-TW')
+        });
+        savePosts(posts);
+        input.value = '';
+        renderPosts();
+    }
+
+    function togglePost(id) {
+        const content = document.getElementById(`content-${id}`);
+        const replies = document.getElementById(`replies-${id}`);
+        const isShow = content.classList.toggle('show');
+        replies.classList.toggle('show', isShow);
+    }
+
+    function renderPosts() {
+        const posts = getPosts();
+        const list = document.getElementById('postList');
+        
+        if (!posts.length) {
+            list.innerHTML = '<div class="loading">還沒有討論，快來發第一篇！</div>';
+            return;
+        }
+
+        list.innerHTML = posts.map(p => `
+            <div class="post-item">
+                <div class="post-header">
+                    <div class="post-title" onclick="togglePost(${p.id})">
+                        <span class="material-symbols-rounded">chat_bubble</span> ${p.title} (${p.replies.length} 回覆)
+                    </div>
+                    <div class="post-meta">
+                        <span class="material-symbols-rounded">person</span> ${p.author} &nbsp; <span class="material-symbols-rounded">schedule</span> ${p.date}
+                    </div>
+                </div>
+                <div class="post-content" id="content-${p.id}">${p.content.replace(/\n/g, '<br>')}</div>
+                <div class="replies" id="replies-${p.id}">
+                    ${p.replies.map(r => `
+                        <div class="reply">
+                            <div class="reply-header"><span class="material-symbols-rounded">person</span> ${r.author} · ${r.date}</div>
+                            <div class="reply-content">${r.content.replace(/\n/g, '<br>')}</div>
+                        </div>
+                    `).join('')}
+                    <div class="reply-form">
+                        <input type="text" id="reply-${p.id}" placeholder="說點什麼...">
+                        <button onclick="addReply(${p.id})"><span class="material-symbols-rounded">send</span> 送出</button>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // 初始化
+    renderPosts();
+</script>
+</body>
+</html>
