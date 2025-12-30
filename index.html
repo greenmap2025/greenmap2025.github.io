@@ -3,14 +3,26 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>永續消費地圖｜探索</title>
+    <title>永續消費地圖｜綠色生活從你我開始</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        *{margin:0;padding:0;box-sizing:border-box;}
-        body{font-family:'Noto Sans TC',sans-serif;background:#f8f9fa;color:#333;}
-        
-        /* --- 統一導覽列 CSS --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            color: #333;
+            line-height: 1.8;
+            min-height: 100vh;
+            position: relative;
+        }
+        body::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="%2343A047"/><circle cx="80" cy="30" r="1.5" fill="%2369f0ae"/><circle cx="50" cy="70" r="2" fill="%238bc34a"/></svg>') repeat;
+            opacity: 0.1; pointer-events: none;
+        }
+
+        /* --- 統一導覽列樣式 --- */
         nav {
             background: rgba(27, 94, 32, 0.95);
             backdrop-filter: blur(10px);
@@ -60,328 +72,220 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
 
-        /* --- 地圖頁面專用 CSS --- */
-        .container{max-width:1400px;margin:2rem auto;padding:0 1rem;display:grid;grid-template-columns:1fr 400px;gap:1.5rem;}
-        @media(max-width:992px){.container{grid-template-columns:1fr;}}
-        
-        .controls{grid-column:1/3;background:white;padding:1.5rem;border-radius:12px;box-shadow:0 3px 15px rgba(0,0,0,.1);display:flex;flex-wrap:wrap;gap:1rem;align-items:center;}
-        .search-box{flex:1;min-width:250px;}
-        .search-box input{width:100%;padding:12px 16px;border:2px solid #a5d6a7;border-radius:12px;font-size:1rem;}
-        .filter-group{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;}
-        select{padding:.8rem 1.2rem;background:#e9f5e9;border-radius:50px;font-weight:bold;border:none;cursor:pointer;font-size:.95rem;min-width:120px;}
-        select:focus{outline:2px solid #43A047;}
-        .fav-btn-control{padding:.8rem 1.5rem;background:#43A047;color:white;border-radius:50px;font-weight:bold;border:none;cursor:pointer;font-size:.95rem;min-width:120px;}
-        .fav-btn-control:hover{background:#388E3C;}
-        
-        .map-container{height:650px;border:3px solid #43A047;border-radius:16px;overflow:hidden;box-shadow:0 8px 25px rgba(0,0,0,.15);}
-        iframe{width:100%;height:100%;border:0;}
-        
-        .store-list{background:white;border-radius:16px;box-shadow:0 5px 20px rgba(0,0,0,.08);max-height:650px;overflow-y:auto;padding:1rem;}
-        .store-item{padding:1rem;border-bottom:1px solid #eee;border-radius:8px;margin-bottom:.5rem;transition:background .2s;cursor:pointer;position:relative;}
-        .store-item:hover{background:#e8f5e9;}
-        .store-name{
-            font-weight:bold;color:#1B5E20;font-size:1.1rem;margin-bottom:.3rem;
-            cursor:pointer;text-decoration:underline;
+        /* --- 頁面內容樣式 --- */
+        .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; position: relative; z-index: 1; }
+
+        .hero {
+            text-align: center;
+            padding: 4rem 1.5rem;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border-radius: 24px;
+            margin-bottom: 3rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,.1);
         }
-        .store-name:hover{color:#43A047;}
-        .store-district{
-            font-size:.8rem;
-            background:#d0e8d0;
-            color:#1B5E20;
-            padding:.25rem .6rem;
-            border-radius:50px;
-            display:inline-block;
-            margin:.3rem 0;
-            font-weight:600;
+        .hero h1 { font-size: 2.8rem; color: #1B5E20; margin-bottom: .5rem; }
+        .hero p { font-size: 1.2rem; max-width: 700px; margin: 0 auto 2rem; color: #444; }
+        .cta-btn {
+            background: linear-gradient(45deg, #43A047, #66bb6a);
+            color: white;
+            padding: 1rem 3rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all .3s;
+            box-shadow: 0 6px 20px rgba(67,160,71,.4);
         }
-        .store-city-tag{
-            font-size:.7rem;
-            background:#1B5E20;
-            color:white;
-            padding:.15rem .5rem;
-            border-radius:50px;
-            margin-left:.5rem;
-            font-weight:600;
+        .cta-btn:hover { transform: translateY(-4px); box-shadow: 0 10px 25px rgba(67,160,71,.5); }
+
+        .services h2, .updates h2, .hotspots h2 {
+            text-align: center;
+            font-size: 1.9rem;
+            color: #1B5E20;
+            margin: 3rem 0 2rem;
+            position: relative;
+            display: inline-block;
+            width: 100%;
         }
-        .store-address{font-size:.9rem;color:#666;margin:.3rem 0;}
-        .store-advantages{font-size:.9rem;color:#2e7d32;margin:.3rem 0;line-height:1.6;}
-        .fav-btn{
-            position:absolute;top:12px;right:12px;
-            background:#f0f0f0;color:#666;
-            padding:.4rem .8rem;border:none;border-radius:8px;
-            cursor:pointer;font-size:.9rem;transition:all .2s;
-            font-weight:600;
+        .services h2::after, .updates h2::after, .hotspots h2::after {
+            content: ''; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%);
+            width: 70px; height: 5px; background: linear-gradient(45deg, #43A047, #66bb6a); border-radius: 3px;
         }
-        .fav-btn.favorited{
-            background:#43A047 !important;color:white !important;
+
+        .service-cards, .spot-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
         }
-        .fav-btn:hover{opacity:.8;}
-        .loading{text-align:center;padding:3rem;color:#666;font-size:1.1rem;}
-        
-        footer{text-align:center;padding:3rem;background:#1B5E20;color:white;margin-top:3rem;}
+        .service-card, .spot-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,.1);
+            transition: all .4s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        .service-card::before, .spot-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 5px;
+            background: linear-gradient(90deg, #43A047, #66bb6a); border-radius: 20px 20px 0 0;
+        }
+        .service-card:hover, .spot-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,.2);
+        }
+        .service-icon {
+            font-size: 3rem;
+            width: 90px; height: 90px;
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.2rem;
+            color: #43A047;
+            transition: .3s;
+        }
+        .service-card:hover .service-icon { transform: rotate(360deg); }
+
+        .updates { position: relative; padding-left: 2.5rem; }
+        .timeline::before {
+            content: ''; position: absolute; left: 12px; top: 0; bottom: 0;
+            width: 6px; background: linear-gradient(#43A047, #66bb6a); border-radius: 3px;
+        }
+        .update-item {
+            position: relative;
+            margin-bottom: 2.5rem;
+            padding-left: 3rem;
+        }
+        .update-item::before {
+            content: ''; position: absolute; left: 0; top: 10px;
+            width: 24px; height: 24px; background: white;
+            border: 6px solid #43A047; border-radius: 50%; box-shadow: 0 0 0 6px #e8f5e9;
+        }
+        .update-content {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1.2rem 1.8rem;
+            border-radius: 16px;
+            box-shadow: 0 5px 15px rgba(0,0,0,.08);
+        }
+
+        .spot-img { height: 200px; overflow: hidden; border-radius: 16px 16px 0 0; }
+        .spot-img img { width: 100%; height: 100%; object-fit: cover; transition: .5s; }
+        .spot-card:hover .spot-img img { transform: scale(1.15); }
+
+        footer { text-align: center; padding: 3rem; background: #1B5E20; color: white; font-size: 0.9rem; margin-top: 4rem; }
 
         @media(max-width:768px) {
             .nav-inner { flex-direction: column; gap: 1rem; }
             .nav-links { flex-wrap: wrap; justify-content: center; }
+            .hero h1 { font-size: 2.2rem; }
+            .service-cards, .spot-cards { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
 
-    <nav>
-        <div class="nav-inner">
-            <a href="index.html" class="logo"><i class="fas fa-leaf"></i> 永續消費地圖</a>
-            <div class="nav-right">
-                <div class="nav-links">
-                    <a href="index.html"><i class="fas fa-home"></i> 首頁</a>
-                    <a href="map.html" class="active"><i class="fas fa-map-marked-alt"></i> 探索地圖</a>
-                    <a href="forum.html"><i class="fas fa-comments"></i> 交流台</a>
+<nav>
+    <div class="nav-inner">
+        <a href="index.html" class="logo"><i class="fas fa-leaf"></i> 永續消費地圖</a>
+        <div class="nav-right">
+            <div class="nav-links">
+                <a href="index.html" class="active"><i class="fas fa-home"></i> 首頁</a>
+                <a href="map.html"><i class="fas fa-map-marked-alt"></i> 探索地圖</a>
+                <a href="forum.html"><i class="fas fa-comments"></i> 交流台</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="hero">
+        <h1>從一餐開始，改變地球</h1>
+        <p>自備容器 × 無包裝商店 × 綠色生活從你我開始</p>
+        <button class="cta-btn" onclick="location.href='map.html'">立即探索地圖</button>
+    </div>
+
+    <div class="services">
+        <h2>我們的服務</h2>
+        <div class="service-cards">
+            <div class="service-card">
+                <div class="service-icon"><i class="fas fa-search-location"></i></div>
+                <h3>搜尋綠色地點</h3>
+                <p>快速找到環保餐廳、回收站、無塑商店等綠色地點。</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon"><i class="fas fa-route"></i></div>
+                <h3>路線導航</h3>
+                <p>支援步行、騎車、開車三種模式，幫你規劃最佳路線。</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon"><i class="fas fa-heart"></i></div>
+                <h3>收藏與分享</h3>
+                <p>喜歡的地點可加入收藏或分享給朋友，一起守護地球。</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="updates">
+        <h2>最新消息</h2>
+        <div class="timeline">
+            <div class="update-item">
+                <div class="update-date">2025/10/01</div>
+                <div class="update-content">
+                    <strong>環保地圖 2.0 正式上線！</strong><br>
+                    全新介面、導航功能更新，支援即時定位與路線規劃。
+                </div>
+            </div>
+            <div class="update-item">
+                <div class="update-date">2025/09/25</div>
+                <div class="update-content">
+                    <strong>新增「無塑商店」分類</strong><br>
+                    全台超過 50 間無塑商店上架，快來探索你身邊的綠色好店。
                 </div>
             </div>
         </div>
-    </nav>
-
-<div class="container">
-    <div class="controls">
-        <div class="search-box">
-            <input type="text" id="searchInput" placeholder="搜尋店名、地址、區域或特點..." onkeyup="filterStores()">
-        </div>
-        <div class="filter-group">
-            <select id="citySelect" onchange="switchCity(this.value)">
-                <option value="新北">新北</option>
-                <option value="台北">台北</option>
-            </select>
-            <select id="districtSelect" onchange="switchDistrict(this.value)">
-                <option value="全部">全部區域</option>
-            </select>
-            <button class="fav-btn-control" id="favButton" onclick="toggleFavorites()">
-                我的收藏 (<span id="favCount">0</span>)
-            </button>
-        </div>
     </div>
 
-    <div class="map-container">
-        <iframe id="map-iframe" src="https://www.google.com/maps/d/embed?mid=1RVjjiUNbpJe9YEcP2Gxj9OpDNMYVVVQ&ehbc=2E312F" allowfullscreen loading="lazy"></iframe>
-    </div>
-
-    <div class="store-list" id="storeList">
-        <div class="loading">載入中…</div>
+    <div class="hotspots">
+        <h2>熱門綠色地點</h2>
+        <div class="spot-cards">
+            <div class="spot-card">
+                <div class="spot-img">
+                    <img src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80" alt="福和蔬食餐廳">
+                </div>
+                <div class="spot-info">
+                    <h3>福和蔬食餐廳</h3>
+                    <p>主打健康素食與環保理念，每天使用可重複清洗餐具。</p>
+                </div>
+            </div>
+            <div class="spot-card">
+                <div class="spot-img">
+                    <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="幸福二手書店">
+                </div>
+                <div class="spot-info">
+                    <h3>幸福二手書店</h3>
+                    <p>循環閱讀，書籍再利用，定期舉辦讀書會。</p>
+                </div>
+            </div>
+            <div class="spot-card">
+                <div class="spot-img">
+                    <img src="https://www.greenpeace.org/static/planet4-taiwan-stateless/2024/05/0853dd13-%E6%A1%83%E5%9C%92%E5%85%92%E7%BE%8E%E9%A4%A8.jpg" alt="無塑生活館">
+                </div>
+                <div class="spot-info">
+                    <h3>無塑生活館</h3>
+                    <p>提供各式無塑生活用品，推廣零廢棄生活。</p>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
 <footer><p>高三專題製作｜永續消費地圖團隊 © 2025</p></footer>
 
-<script>
-    const SHEET_ID = '1uu_D_9cqpv80o8QpCQmzByiilTzU1BKyKnPi5cFjMzA';
-    const CITY_SHEETS = {
-        '新北': '環保餐廳-新北',
-        '台北': '台北'
-    };
-    // 這裡記得換成你真正的 My Maps 分享連結
-    const MAP_URLS = {
-        '新北': 'https://www.google.com/maps/d/embed?mid=1RVjjiUNbpJe9YEcP2Gxj9OpDNMYVVVQ&ehbc=2E312F',
-        '台北': 'https://www.google.com/maps/d/embed?mid=1n6Kw17wazzDD76EZPZXKUebU2hB8XkU&ehbc=2E312F'
-    };
-
-    let currentCity = '新北';
-    let currentDistrict = '全部';
-    let showFavorites = false;
-    let allStores = [];
-    let allStoresGlobal = [];
-
-    // === 收藏功能 ===
-    function getFavorites() { return JSON.parse(localStorage.getItem('favStores') || '[]'); }
-    function saveFavorites(arr) { localStorage.setItem('favStores', JSON.stringify(arr)); }
-    function toggleFav(name, button) {
-        let fav = getFavorites();
-        if (fav.includes(name)) {
-            fav = fav.filter(n => n !== name);
-            button.classList.remove('favorited');
-            button.innerHTML = '<i class="far fa-heart"></i>'; // 空心愛心
-        } else {
-            fav.push(name);
-            button.classList.add('favorited');
-            button.innerHTML = '<i class="fas fa-heart"></i>'; // 實心愛心
-        }
-        saveFavorites(fav);
-        updateFavCount();
-        if (showFavorites) renderStoreList();
-    }
-
-    function updateFavCount() {
-        const count = getFavorites().length;
-        document.getElementById('favCount').innerText = count;
-    }
-
-    // === CSV 解析 ===
-    function parseCSVLine(line) {
-        const result = [];
-        let current = '';
-        let inQuotes = false;
-        for (let i = 0; i < line.length; i++) {
-            const char = line[i];
-            if (char === '"') inQuotes = !inQuotes;
-            else if (char === ',' && !inQuotes) {
-                result.push(current.trim().replace(/^"|"$/g, ''));
-                current = '';
-            } else current += char;
-        }
-        result.push(current.trim().replace(/^"|"$/g, ''));
-        return result;
-    }
-
-    // === Google Maps 跳轉功能 (修復版) ===
-    function openGoogleMaps(address, storeName) {
-        if (!address || address === '無地址') {
-            alert(`「${storeName}」沒有提供地址，無法導航`);
-            return;
-        }
-        let query = address;
-        if (!query.includes('台灣') && !query.includes('Taiwan')) {
-            query = '台灣 ' + query;
-        }
-        // 修正這裡的網址格式
-        const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
-        window.open(url, '_blank');
-    }
-
-    // === 載入資料 ===
-    async function loadStores(city) {
-        const sheetName = CITY_SHEETS[city] || CITY_SHEETS['新北'];
-        const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(sheetName)}`;
-        
-        // 顯示載入中
-        document.getElementById('storeList').innerHTML = '<div class="loading">資料讀取中...</div>';
-
-        try {
-            const res = await fetch(CSV_URL, { cache: 'no-cache' });
-            if (!res.ok) throw new Error(`HTTP ${res.status}`);
-            const txt = await res.text();
-            const lines = txt.split('\n').slice(1).filter(l => l.trim());
-
-            const stores = lines.map(l => {
-                const v = parseCSVLine(l);
-                return {
-                    name:       v[0] || '未知店家',
-                    address:    v[1] || '無地址',
-                    district:   (v[2] || '未知區域').trim().replace(/區$/g, ''),
-                    advantages: v[3] || '無優點',
-                    city:       city
-                };
-            });
-
-            allStores = stores;
-            allStoresGlobal = allStoresGlobal.filter(s => s.city !== city);
-            allStoresGlobal = allStoresGlobal.concat(stores);
-
-            updateDistrictDropdown();
-            updateFavCount();
-            renderStoreList();
-        } catch(e) {
-            console.error('載入失敗:', e);
-            document.getElementById('storeList').innerHTML = `
-                <div class="loading" style="color:#d32f2f;">
-                    載入失敗！<br>工作表：<strong>${sheetName}</strong><br>
-                    請確認權限正確<br>
-                    <small>錯誤：${e.message}</small>
-                </div>`;
-        }
-    }
-
-    function updateDistrictDropdown() {
-        const select = document.getElementById('districtSelect');
-        const districts = [...new Set(allStores.map(s => s.district).filter(d => d && d !== '未知區域'))];
-        select.innerHTML = `<option value="全部">全部區域</option>`;
-        districts.sort().forEach(d => {
-            select.innerHTML += `<option value="${d}">${d}</option>`;
-        });
-    }
-
-    function renderStoreList() {
-        let list = [];
-        if (showFavorites) {
-            const favs = getFavorites();
-            list = allStoresGlobal.filter(s => favs.includes(s.name));
-            if (list.length === 0) {
-                document.getElementById('storeList').innerHTML = '<div class="loading">尚未收藏任何店家</div>';
-                return;
-            }
-        } else {
-            list = allStores;
-            if (currentDistrict !== '全部') {
-                list = list.filter(s => s.district === currentDistrict);
-            }
-        }
-
-        const favs = getFavorites();
-        const html = list.map(s => `
-            <div class="store-item">
-                <div class="store-name" onclick="openGoogleMaps('${s.address.replace(/'/g, "\\'")}', '${s.name.replace(/'/g, "\\'")}')">
-                    ${s.name}
-                    ${showFavorites ? `<span class="store-city-tag">${s.city}</span>` : ''}
-                </div>
-                <div class="store-district">${s.district}</div>
-                <div class="store-address">${s.address}</div>
-                <div class="store-advantages">${s.advantages}</div>
-                <button class="fav-btn ${favs.includes(s.name)?'favorited':''}" 
-                        onclick="event.stopPropagation(); toggleFav('${s.name.replace(/'/g, "\\'")}', this)">
-                    ${favs.includes(s.name)?'<i class="fas fa-heart"></i>':'<i class="far fa-heart"></i>'}
-                </button>
-            </div>
-        `).join('');
-        document.getElementById('storeList').innerHTML = html || '<div class="loading">無符合資料</div>';
-    }
-
-    function filterStores() {
-        const q = document.getElementById('searchInput').value.toLowerCase();
-        const filtered = allStores.filter(s =>
-            s.name.toLowerCase().includes(q) ||
-            s.address.toLowerCase().includes(q) ||
-            s.district.toLowerCase().includes(q) ||
-            s.advantages.toLowerCase().includes(q)
-        );
-        const favs = getFavorites();
-        document.getElementById('storeList').innerHTML = filtered.map(s => `
-            <div class="store-item">
-                <div class="store-name" onclick="openGoogleMaps('${s.address.replace(/'/g, "\\'")}', '${s.name.replace(/'/g, "\\'")}')">
-                    ${s.name}
-                </div>
-                <div class="store-district">${s.district}</div>
-                <div class="store-address">${s.address}</div>
-                <div class="store-advantages">${s.advantages}</div>
-                <button class="fav-btn ${favs.includes(s.name)?'favorited':''}" 
-                        onclick="event.stopPropagation(); toggleFav('${s.name.replace(/'/g, "\\'")}', this)">
-                    ${favs.includes(s.name)?'<i class="fas fa-heart"></i>':'<i class="far fa-heart"></i>'}
-                </button>
-            </div>
-        `).join('') || '<div class="loading">無符合資料</div>';
-    }
-
-    function switchCity(city) {
-        currentCity = city;
-        document.getElementById('citySelect').value = city;
-        document.getElementById('map-iframe').src = MAP_URLS[city] || MAP_URLS['新北'];
-        loadStores(city);
-        currentDistrict = '全部';
-        document.getElementById('districtSelect').value = '全部';
-        showFavorites = false;
-        document.getElementById('favButton').style.background = '#43A047';
-    }
-
-    function switchDistrict(district) {
-        currentDistrict = district;
-        renderStoreList();
-    }
-
-    function toggleFavorites() {
-        showFavorites = !showFavorites;
-        const btn = document.getElementById('favButton');
-        btn.style.background = showFavorites ? '#388E3C' : '#43A047';
-        renderStoreList();
-    }
-
-    // 初始化
-    loadStores('新北');
-</script>
 </body>
 </html>
