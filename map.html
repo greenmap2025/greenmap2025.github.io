@@ -3,46 +3,67 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>永續消費地圖</title>
+    <title>永續消費地圖｜探索</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         *{margin:0;padding:0;box-sizing:border-box;}
         body{font-family:'Noto Sans TC',sans-serif;background:#f8f9fa;color:#333;}
+        
+        /* --- 統一導覽列 CSS --- */
         nav {
             background: rgba(27, 94, 32, 0.95);
             backdrop-filter: blur(10px);
-            color: white;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 20px rgba(0,0,0,.15);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
             position: sticky;
             top: 0;
             z-index: 1000;
-            flex-wrap: wrap;
-            gap: 1rem;
+            width: 100%;
         }
-        .logo { font-size: 1.7rem; font-weight: bold; display: flex; align-items: center; gap: .5rem; }
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
         .logo i { color: #8bc34a; animation: pulse 2s infinite; }
         @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.1); } }
-        .nav-links {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
+        
+        .nav-right { display: flex; align-items: center; gap: 20px; }
+        .nav-links { display: flex; gap: 10px; }
         .nav-links a {
             color: white;
             text-decoration: none;
             font-weight: 500;
-            padding: .6rem 1.4rem;
+            padding: 0.5rem 1.2rem;
             border-radius: 50px;
-            transition: .3s;
-            font-size: .95rem;
+            transition: 0.3s;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
-        .nav-links a:hover { background: #43A047; transform: translateY(-2px); }
+        .nav-links a:hover, .nav-links a.active {
+            background: #43A047;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        /* --- 地圖頁面專用 CSS --- */
         .container{max-width:1400px;margin:2rem auto;padding:0 1rem;display:grid;grid-template-columns:1fr 400px;gap:1.5rem;}
         @media(max-width:992px){.container{grid-template-columns:1fr;}}
+        
         .controls{grid-column:1/3;background:white;padding:1.5rem;border-radius:12px;box-shadow:0 3px 15px rgba(0,0,0,.1);display:flex;flex-wrap:wrap;gap:1rem;align-items:center;}
         .search-box{flex:1;min-width:250px;}
         .search-box input{width:100%;padding:12px 16px;border:2px solid #a5d6a7;border-radius:12px;font-size:1rem;}
@@ -51,8 +72,10 @@
         select:focus{outline:2px solid #43A047;}
         .fav-btn-control{padding:.8rem 1.5rem;background:#43A047;color:white;border-radius:50px;font-weight:bold;border:none;cursor:pointer;font-size:.95rem;min-width:120px;}
         .fav-btn-control:hover{background:#388E3C;}
+        
         .map-container{height:650px;border:3px solid #43A047;border-radius:16px;overflow:hidden;box-shadow:0 8px 25px rgba(0,0,0,.15);}
         iframe{width:100%;height:100%;border:0;}
+        
         .store-list{background:white;border-radius:16px;box-shadow:0 5px 20px rgba(0,0,0,.08);max-height:650px;overflow-y:auto;padding:1rem;}
         .store-item{padding:1rem;border-bottom:1px solid #eee;border-radius:8px;margin-bottom:.5rem;transition:background .2s;cursor:pointer;position:relative;}
         .store-item:hover{background:#e8f5e9;}
@@ -94,17 +117,27 @@
         }
         .fav-btn:hover{opacity:.8;}
         .loading{text-align:center;padding:3rem;color:#666;font-size:1.1rem;}
+        
         footer{text-align:center;padding:3rem;background:#1B5E20;color:white;margin-top:3rem;}
+
+        @media(max-width:768px) {
+            .nav-inner { flex-direction: column; gap: 1rem; }
+            .nav-links { flex-wrap: wrap; justify-content: center; }
+        }
     </style>
 </head>
 <body>
 
     <nav>
-        <div class="logo"><i class="fas fa-leaf"></i> 永續消費地圖</div>
-        <div class="nav-links">
-            <a href="index.html"><i class="fas fa-home"></i> 首頁</a>
-            <a href="map.html"><i class="fas fa-map-marked-alt"></i> 探索地圖</a>
-            <a href="forum.html"><i class="fas fa-comments"></i> 交流台</a>
+        <div class="nav-inner">
+            <a href="index.html" class="logo"><i class="fas fa-leaf"></i> 永續消費地圖</a>
+            <div class="nav-right">
+                <div class="nav-links">
+                    <a href="index.html"><i class="fas fa-home"></i> 首頁</a>
+                    <a href="map.html" class="active"><i class="fas fa-map-marked-alt"></i> 探索地圖</a>
+                    <a href="forum.html"><i class="fas fa-comments"></i> 交流台</a>
+                </div>
+            </div>
         </div>
     </nav>
 
@@ -144,6 +177,7 @@
         '新北': '環保餐廳-新北',
         '台北': '台北'
     };
+    // 這裡記得換成你真正的 My Maps 分享連結
     const MAP_URLS = {
         '新北': 'https://www.google.com/maps/d/embed?mid=1RVjjiUNbpJe9YEcP2Gxj9OpDNMYVVVQ&ehbc=2E312F',
         '台北': 'https://www.google.com/maps/d/embed?mid=1n6Kw17wazzDD76EZPZXKUebU2hB8XkU&ehbc=2E312F'
@@ -163,11 +197,11 @@
         if (fav.includes(name)) {
             fav = fav.filter(n => n !== name);
             button.classList.remove('favorited');
-            button.innerHTML = 'Heart';
+            button.innerHTML = '<i class="far fa-heart"></i>'; // 空心愛心
         } else {
             fav.push(name);
             button.classList.add('favorited');
-            button.innerHTML = 'Heart';
+            button.innerHTML = '<i class="fas fa-heart"></i>'; // 實心愛心
         }
         saveFavorites(fav);
         updateFavCount();
@@ -196,17 +230,17 @@
         return result;
     }
 
-    // === Google Maps 跳轉功能 ===
+    // === Google Maps 跳轉功能 (修復版) ===
     function openGoogleMaps(address, storeName) {
         if (!address || address === '無地址') {
             alert(`「${storeName}」沒有提供地址，無法導航`);
             return;
         }
-        // 自動補台灣
         let query = address;
         if (!query.includes('台灣') && !query.includes('Taiwan')) {
             query = '台灣 ' + query;
         }
+        // 修正這裡的網址格式
         const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
         window.open(url, '_blank');
     }
@@ -216,6 +250,9 @@
         const sheetName = CITY_SHEETS[city] || CITY_SHEETS['新北'];
         const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(sheetName)}`;
         
+        // 顯示載入中
+        document.getElementById('storeList').innerHTML = '<div class="loading">資料讀取中...</div>';
+
         try {
             const res = await fetch(CSV_URL, { cache: 'no-cache' });
             if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -288,7 +325,7 @@
                 <div class="store-advantages">${s.advantages}</div>
                 <button class="fav-btn ${favs.includes(s.name)?'favorited':''}" 
                         onclick="event.stopPropagation(); toggleFav('${s.name.replace(/'/g, "\\'")}', this)">
-                    ${favs.includes(s.name)?'Heart':'Heart'}
+                    ${favs.includes(s.name)?'<i class="fas fa-heart"></i>':'<i class="far fa-heart"></i>'}
                 </button>
             </div>
         `).join('');
@@ -314,7 +351,7 @@
                 <div class="store-advantages">${s.advantages}</div>
                 <button class="fav-btn ${favs.includes(s.name)?'favorited':''}" 
                         onclick="event.stopPropagation(); toggleFav('${s.name.replace(/'/g, "\\'")}', this)">
-                    ${favs.includes(s.name)?'Heart':'Heart'}
+                    ${favs.includes(s.name)?'<i class="fas fa-heart"></i>':'<i class="far fa-heart"></i>'}
                 </button>
             </div>
         `).join('') || '<div class="loading">無符合資料</div>';
