@@ -4,22 +4,63 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>永續消費交流台</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         :root { --primary: #43A047; --light: #E8F5E9; --bg: #F8FDF8; --text: #2E7D32; --shadow: 0 8px 25px rgba(0,0,0,0.08); --transition: all 0.3s ease; }
         *{margin:0;padding:0;box-sizing:border-box;}
         body{font-family:'Noto Sans TC',sans-serif;background:linear-gradient(135deg, #E8F5E9 0%, #F8FDF8 100%);color:var(--text);min-height:100vh;}
         
-        /* 統一導覽列 */
-        nav{background: #1B5E20;color:white;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:1000;box-shadow:0 4px 20px rgba(0,0,0,.1);}
-        .logo{font-size:1.8rem;font-weight:700;display:flex;align-items:center;gap:10px;}
-        .logo img{width:32px;height:32px;filter:brightness(0) invert(1);}
-        .nav-links a{color:white;text-decoration:none;margin-left:1.5rem;font-weight:500;position:relative;transition:var(--transition);}
-        .nav-links a:hover{color:#C8E6C9;}
-        .nav-links a::after{content:'';position:absolute;bottom:-5px;left:0;width:0;height:2px;background:#C8E6C9;transition:var(--transition);}
-        .nav-links a:hover::after{width:100%;}
-        .user-name{font-weight:600;color:#C8E6C9;}
+        /* --- 統一導覽列 CSS --- */
+        nav {
+            background: rgba(27, 94, 32, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            width: 100%;
+        }
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+        .logo i { color: #8bc34a; }
+        
+        .nav-right { display: flex; align-items: center; gap: 20px; }
+        .nav-links { display: flex; gap: 10px; }
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            transition: 0.3s;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .nav-links a:hover, .nav-links a.active {
+            background: #43A047;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
 
+        /* --- 交流台專用 CSS --- */
         .container{max-width:900px;margin:2rem auto;padding:0 1rem;}
         .post-form{background:white;padding:2rem;border-radius:20px;box-shadow:var(--shadow);margin-bottom:2rem;}
         .post-form h2{font-size:1.5rem;color:var(--primary);margin-bottom:1rem;}
@@ -51,34 +92,43 @@
 
         .loading{text-align:center;padding:3rem;color:#666;font-size:1.1rem;}
         footer{text-align:center;padding:2.5rem;background:var(--primary);color:white;margin-top:3rem;font-size:.9rem;}
+
+        @media(max-width:768px) {
+            .nav-inner { flex-direction: column; gap: 1rem; }
+            .nav-links { flex-wrap: wrap; justify-content: center; }
+        }
     </style>
 </head>
 <body>
 
-<!-- 統一導覽列 -->
 <nav>
-    <div class="logo">
-        <img src="https://i.imgur.com/leaf-logo.png" alt="葉子">
-        永續消費地圖
+    <div class="nav-inner">
+        <a href="index.html" class="logo"><i class="fas fa-leaf"></i> 永續消費地圖</a>
+        
+        <div class="nav-right">
+            <div class="nav-links">
+                <a href="index.html"><i class="fas fa-home"></i> 首頁</a>
+                <a href="map.html"><i class="fas fa-map-marked-alt"></i> 探索地圖</a>
+                <a href="forum.html" class="active"><i class="fas fa-comments"></i> 交流台</a>
+            </div>
+            
+            <span id="userName" style="color: #C8E6C9; font-weight: bold; border-left: 1px solid rgba(255,255,255,0.3); padding-left: 15px; white-space: nowrap;">
+                <i class="fas fa-user-circle"></i> 訪客
+            </span>
+        </div>
     </div>
-    <div class="nav-links">
-        <a href="index.html">首頁</a>
-        <a href="map.html">探索地圖</a>
-        <a href="forum.html">交流台</a>
-    </div>
-    <span class="user-name" id="userName"></span>
 </nav>
 
 <div class="container">
 
     <div class="user-setting">
-        <h2>設定你的暱稱</h2>
+        <h2><i class="fas fa-user-edit"></i> 設定你的暱稱</h2>
         <input type="text" id="userInput" placeholder="輸入你的暱稱">
         <button onclick="setUserName()">儲存</button>
     </div>
 
     <div class="post-form">
-        <h2>分享你的永續心得</h2>
+        <h2><i class="fas fa-pen-nib"></i> 分享你的永續心得</h2>
         <input type="text" id="postTitle" placeholder="標題（如：萬華這家超推！）">
         <textarea id="postContent" rows="4" placeholder="寫下你的發現、問題或推薦..."></textarea>
         <button onclick="addPost()">發布貼文</button>
@@ -94,8 +144,11 @@
 <script>
     // 使用者登入狀態
     let userName = localStorage.getItem('userName') || '訪客';
-    document.getElementById('userName').innerText = userName;
-    document.getElementById('userInput').value = userName;
+    function updateDisplayUser() {
+        document.getElementById('userName').innerHTML = `<i class="fas fa-user-circle"></i> ${userName}`;
+        document.getElementById('userInput').value = userName;
+    }
+    updateDisplayUser();
 
     function setUserName() {
         const name = document.getElementById('userInput').value.trim();
@@ -105,8 +158,14 @@
         }
         userName = name;
         localStorage.setItem('userName', name);
-        document.getElementById('userName').innerText = name;
+        updateDisplayUser();
         alert('暱稱已更新！');
+    }
+
+    // 取得當前時間字串
+    function getTimeString() {
+        const now = new Date();
+        return `${now.getFullYear()}/${now.getMonth()+1}/${now.getDate()} ${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}`;
     }
 
     // 貼文系統
@@ -124,7 +183,7 @@
             title,
             content,
             author: userName,
-            date: new Date().toLocaleString('zh-TW'),
+            date: getTimeString(),
             replies: []
         });
         savePosts(posts);
@@ -144,7 +203,7 @@
         post.replies.push({
             content: reply,
             author: userName,
-            date: new Date().toLocaleString('zh-TW')
+            date: getTimeString()
         });
         savePosts(posts);
         input.value = '';
@@ -171,23 +230,23 @@
             <div class="post-item">
                 <div class="post-header">
                     <div class="post-title" onclick="togglePost(${p.id})">
-                        <span class="material-symbols-rounded">chat_bubble</span> ${p.title} (${p.replies.length} 回覆)
+                        <i class="far fa-comment-dots"></i> ${p.title} (${p.replies.length} 回覆)
                     </div>
                     <div class="post-meta">
-                        <span class="material-symbols-rounded">person</span> ${p.author} &nbsp; <span class="material-symbols-rounded">schedule</span> ${p.date}
+                        <i class="far fa-user"></i> ${p.author} &nbsp; <i class="far fa-clock"></i> ${p.date}
                     </div>
                 </div>
                 <div class="post-content" id="content-${p.id}">${p.content.replace(/\n/g, '<br>')}</div>
                 <div class="replies" id="replies-${p.id}">
                     ${p.replies.map(r => `
                         <div class="reply">
-                            <div class="reply-header"><span class="material-symbols-rounded">person</span> ${r.author} · ${r.date}</div>
+                            <div class="reply-header"><i class="fas fa-user"></i> ${r.author} · ${r.date}</div>
                             <div class="reply-content">${r.content.replace(/\n/g, '<br>')}</div>
                         </div>
                     `).join('')}
                     <div class="reply-form">
                         <input type="text" id="reply-${p.id}" placeholder="說點什麼...">
-                        <button onclick="addReply(${p.id})"><span class="material-symbols-rounded">send</span> 送出</button>
+                        <button onclick="addReply(${p.id})"><i class="fas fa-paper-plane"></i> 送出</button>
                     </div>
                 </div>
             </div>
