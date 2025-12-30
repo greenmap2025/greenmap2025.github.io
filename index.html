@@ -1,28 +1,17 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>永續消費地圖｜綠色生活從你我開始</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>永續消費交流台</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Noto Sans TC', sans-serif;
-            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
-            color: #333;
-            line-height: 1.8;
-            min-height: 100vh;
-            position: relative;
-        }
-        body::before {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="%2343A047"/><circle cx="80" cy="30" r="1.5" fill="%2369f0ae"/><circle cx="50" cy="70" r="2" fill="%238bc34a"/></svg>') repeat;
-            opacity: 0.1; pointer-events: none;
-        }
-
-        /* --- 統一導覽列樣式 --- */
+        :root { --primary: #43A047; --light: #E8F5E9; --bg: #F8FDF8; --text: #2E7D32; --shadow: 0 8px 25px rgba(0,0,0,0.08); --transition: all 0.3s ease; }
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{font-family:'Noto Sans TC',sans-serif;background:linear-gradient(135deg, #E8F5E9 0%, #F8FDF8 100%);color:var(--text);min-height:100vh;}
+        
+        /* --- 統一導覽列 CSS --- */
         nav {
             background: rgba(27, 94, 32, 0.95);
             backdrop-filter: blur(10px);
@@ -49,8 +38,7 @@
             gap: 10px;
             text-decoration: none;
         }
-        .logo i { color: #8bc34a; animation: pulse 2s infinite; }
-        @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        .logo i { color: #8bc34a; }
         
         .nav-right { display: flex; align-items: center; gap: 20px; }
         .nav-links { display: flex; gap: 10px; }
@@ -72,119 +60,42 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
 
-        /* --- 頁面內容樣式 --- */
-        .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; position: relative; z-index: 1; }
+        /* --- 交流台專用 CSS --- */
+        .container{max-width:900px;margin:2rem auto;padding:0 1rem;}
+        .post-form{background:white;padding:2rem;border-radius:20px;box-shadow:var(--shadow);margin-bottom:2rem;}
+        .post-form h2{font-size:1.5rem;color:var(--primary);margin-bottom:1rem;}
+        .post-form input, .post-form textarea{width:100%;padding:12px 16px;border:2px solid #A5D6A7;border-radius:12px;margin-bottom:1rem;font-size:1rem;outline:none;transition:var(--transition);}
+        .post-form input:focus, .post-form textarea:focus{border-color:var(--primary);}
+        .post-form button{background:var(--primary);color:white;padding:12px 28px;border:none;border-radius:50px;font-weight:600;cursor:pointer;font-size:1rem;transition:var(--transition);}
+        .post-form button:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(67,160,71,.3);}
 
-        .hero {
-            text-align: center;
-            padding: 4rem 1.5rem;
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(12px);
-            border-radius: 24px;
-            margin-bottom: 3rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,.1);
-        }
-        .hero h1 { font-size: 2.8rem; color: #1B5E20; margin-bottom: .5rem; }
-        .hero p { font-size: 1.2rem; max-width: 700px; margin: 0 auto 2rem; color: #444; }
-        .cta-btn {
-            background: linear-gradient(45deg, #43A047, #66bb6a);
-            color: white;
-            padding: 1rem 3rem;
-            border: none;
-            border-radius: 50px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all .3s;
-            box-shadow: 0 6px 20px rgba(67,160,71,.4);
-        }
-        .cta-btn:hover { transform: translateY(-4px); box-shadow: 0 10px 25px rgba(67,160,71,.5); }
+        .user-setting{background:white;padding:2rem;border-radius:20px;box-shadow:var(--shadow);margin-bottom:2rem;}
+        .user-setting h2{font-size:1.5rem;color:var(--primary);margin-bottom:1rem;}
 
-        .services h2, .updates h2, .hotspots h2 {
-            text-align: center;
-            font-size: 1.9rem;
-            color: #1B5E20;
-            margin: 3rem 0 2rem;
-            position: relative;
-            display: inline-block;
-            width: 100%;
-        }
-        .services h2::after, .updates h2::after, .hotspots h2::after {
-            content: ''; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%);
-            width: 70px; height: 5px; background: linear-gradient(45deg, #43A047, #66bb6a); border-radius: 3px;
-        }
+        .post-list{background:white;border-radius:20px;box-shadow:var(--shadow);padding:1.5rem;overflow-y:auto;max-height:calc(100vh - 300px);}
+        .post-item{padding:1.8rem;border-bottom:1px solid #eee;transition:var(--transition);border-radius:14px;margin-bottom:1rem;background:#fff;}
+        .post-item:hover{background:#f8fff8;transform:translateY(-3px);box-shadow:0 6px 18px rgba(0,0,0,.08);}
+        .post-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:.8rem;}
+        .post-title{font-weight:700;color:var(--primary);font-size:1.25rem;cursor:pointer;}
+        .post-title:hover{color:#388E3C;}
+        .post-meta{font-size:.85rem;color:#666;display:flex;align-items:center;gap:8px;}
+        .post-content{line-height:1.8;color:#444;margin:1rem 0;display:none;}
+        .post-content.show{display:block;}
+        .replies{margin-top:1rem;padding-left:1.5rem;border-left:3px solid var(--light);display:none;}
+        .replies.show{display:block;}
+        .reply{padding:1rem;background:#f9f9f9;border-radius:10px;margin-bottom:.8rem;box-shadow:0 2px 6px rgba(0,0,0,.05);}
+        .reply-header{font-size:.9rem;color:#666;margin-bottom:.4rem;}
+        .reply-content{line-height:1.6;color:#444;}
+        .reply-form{margin-top:1rem;display:flex;gap:8px;}
+        .reply-form input{flex:1;padding:10px;border:2px solid #A5D6A7;border-radius:10px;outline:none;}
+        .reply-form button{background:#388E3C;color:white;padding:10px 18px;border:none;border-radius:10px;cursor:pointer;font-weight:500;}
 
-        .service-cards, .spot-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-        }
-        .service-card, .spot-card {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(10px);
-            padding: 2rem;
-            border-radius: 20px;
-            box-shadow: 0 8px 25px rgba(0,0,0,.1);
-            transition: all .4s ease;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-        .service-card::before, .spot-card::before {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 5px;
-            background: linear-gradient(90deg, #43A047, #66bb6a); border-radius: 20px 20px 0 0;
-        }
-        .service-card:hover, .spot-card:hover {
-            transform: translateY(-12px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(0,0,0,.2);
-        }
-        .service-icon {
-            font-size: 3rem;
-            width: 90px; height: 90px;
-            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1.2rem;
-            color: #43A047;
-            transition: .3s;
-        }
-        .service-card:hover .service-icon { transform: rotate(360deg); }
-
-        .updates { position: relative; padding-left: 2.5rem; }
-        .timeline::before {
-            content: ''; position: absolute; left: 12px; top: 0; bottom: 0;
-            width: 6px; background: linear-gradient(#43A047, #66bb6a); border-radius: 3px;
-        }
-        .update-item {
-            position: relative;
-            margin-bottom: 2.5rem;
-            padding-left: 3rem;
-        }
-        .update-item::before {
-            content: ''; position: absolute; left: 0; top: 10px;
-            width: 24px; height: 24px; background: white;
-            border: 6px solid #43A047; border-radius: 50%; box-shadow: 0 0 0 6px #e8f5e9;
-        }
-        .update-content {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 1.2rem 1.8rem;
-            border-radius: 16px;
-            box-shadow: 0 5px 15px rgba(0,0,0,.08);
-        }
-
-        .spot-img { height: 200px; overflow: hidden; border-radius: 16px 16px 0 0; }
-        .spot-img img { width: 100%; height: 100%; object-fit: cover; transition: .5s; }
-        .spot-card:hover .spot-img img { transform: scale(1.15); }
-
-        footer { text-align: center; padding: 3rem; background: #1B5E20; color: white; font-size: 0.9rem; margin-top: 4rem; }
+        .loading{text-align:center;padding:3rem;color:#666;font-size:1.1rem;}
+        footer{text-align:center;padding:2.5rem;background:var(--primary);color:white;margin-top:3rem;font-size:.9rem;}
 
         @media(max-width:768px) {
             .nav-inner { flex-direction: column; gap: 1rem; }
             .nav-links { flex-wrap: wrap; justify-content: center; }
-            .hero h1 { font-size: 2.2rem; }
-            .service-cards, .spot-cards { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -193,99 +104,157 @@
 <nav>
     <div class="nav-inner">
         <a href="index.html" class="logo"><i class="fas fa-leaf"></i> 永續消費地圖</a>
+        
         <div class="nav-right">
             <div class="nav-links">
-                <a href="index.html" class="active"><i class="fas fa-home"></i> 首頁</a>
+                <a href="index.html"><i class="fas fa-home"></i> 首頁</a>
                 <a href="map.html"><i class="fas fa-map-marked-alt"></i> 探索地圖</a>
-                <a href="forum.html"><i class="fas fa-comments"></i> 交流台</a>
+                <a href="forum.html" class="active"><i class="fas fa-comments"></i> 交流台</a>
             </div>
+            
+            <span id="userName" style="color: #C8E6C9; font-weight: bold; border-left: 1px solid rgba(255,255,255,0.3); padding-left: 15px; white-space: nowrap;">
+                <i class="fas fa-user-circle"></i> 訪客
+            </span>
         </div>
     </div>
 </nav>
 
 <div class="container">
-    <div class="hero">
-        <h1>從一餐開始，改變地球</h1>
-        <p>自備容器 × 無包裝商店 × 綠色生活從你我開始</p>
-        <button class="cta-btn" onclick="location.href='map.html'">立即探索地圖</button>
+
+    <div class="user-setting">
+        <h2><i class="fas fa-user-edit"></i> 設定你的暱稱</h2>
+        <input type="text" id="userInput" placeholder="輸入你的暱稱">
+        <button onclick="setUserName()">儲存</button>
     </div>
 
-    <div class="services">
-        <h2>我們的服務</h2>
-        <div class="service-cards">
-            <div class="service-card">
-                <div class="service-icon"><i class="fas fa-search-location"></i></div>
-                <h3>搜尋綠色地點</h3>
-                <p>快速找到環保餐廳、回收站、無塑商店等綠色地點。</p>
-            </div>
-            <div class="service-card">
-                <div class="service-icon"><i class="fas fa-route"></i></div>
-                <h3>路線導航</h3>
-                <p>支援步行、騎車、開車三種模式，幫你規劃最佳路線。</p>
-            </div>
-            <div class="service-card">
-                <div class="service-icon"><i class="fas fa-heart"></i></div>
-                <h3>收藏與分享</h3>
-                <p>喜歡的地點可加入收藏或分享給朋友，一起守護地球。</p>
-            </div>
-        </div>
+    <div class="post-form">
+        <h2><i class="fas fa-pen-nib"></i> 分享你的永續心得</h2>
+        <input type="text" id="postTitle" placeholder="標題（如：萬華這家超推！）">
+        <textarea id="postContent" rows="4" placeholder="寫下你的發現、問題或推薦..."></textarea>
+        <button onclick="addPost()">發布貼文</button>
     </div>
 
-    <div class="updates">
-        <h2>最新消息</h2>
-        <div class="timeline">
-            <div class="update-item">
-                <div class="update-date">2025/10/01</div>
-                <div class="update-content">
-                    <strong>環保地圖 2.0 正式上線！</strong><br>
-                    全新介面、導航功能更新，支援即時定位與路線規劃。
-                </div>
-            </div>
-            <div class="update-item">
-                <div class="update-date">2025/09/25</div>
-                <div class="update-content">
-                    <strong>新增「無塑商店」分類</strong><br>
-                    全台超過 50 間無塑商店上架，快來探索你身邊的綠色好店。
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="hotspots">
-        <h2>熱門綠色地點</h2>
-        <div class="spot-cards">
-            <div class="spot-card">
-                <div class="spot-img">
-                    <img src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80" alt="福和蔬食餐廳">
-                </div>
-                <div class="spot-info">
-                    <h3>福和蔬食餐廳</h3>
-                    <p>主打健康素食與環保理念，每天使用可重複清洗餐具。</p>
-                </div>
-            </div>
-            <div class="spot-card">
-                <div class="spot-img">
-                    <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="幸福二手書店">
-                </div>
-                <div class="spot-info">
-                    <h3>幸福二手書店</h3>
-                    <p>循環閱讀，書籍再利用，定期舉辦讀書會。</p>
-                </div>
-            </div>
-            <div class="spot-card">
-                <div class="spot-img">
-                    <img src="https://www.greenpeace.org/static/planet4-taiwan-stateless/2024/05/0853dd13-%E6%A1%83%E5%9C%92%E5%85%92%E7%BE%8E%E9%A4%A8.jpg" alt="無塑生活館">
-                </div>
-                <div class="spot-info">
-                    <h3>無塑生活館</h3>
-                    <p>提供各式無塑生活用品，推廣零廢棄生活。</p>
-                </div>
-            </div>
-        </div>
+    <div class="post-list" id="postList">
+        <div class="loading">載入中...</div>
     </div>
 </div>
 
-<footer><p>高三專題製作｜永續消費地圖團隊 © 2025</p></footer>
+<footer><p>高三專題製作｜永續消費交流台 © 2025</p></footer>
 
+<script>
+    // 使用者登入狀態
+    let userName = localStorage.getItem('userName') || '訪客';
+    function updateDisplayUser() {
+        document.getElementById('userName').innerHTML = `<i class="fas fa-user-circle"></i> ${userName}`;
+        document.getElementById('userInput').value = userName;
+    }
+    updateDisplayUser();
+
+    function setUserName() {
+        const name = document.getElementById('userInput').value.trim();
+        if (!name) {
+            alert('請輸入有效的暱稱！');
+            return;
+        }
+        userName = name;
+        localStorage.setItem('userName', name);
+        updateDisplayUser();
+        alert('暱稱已更新！');
+    }
+
+    // 取得當前時間字串
+    function getTimeString() {
+        const now = new Date();
+        return `${now.getFullYear()}/${now.getMonth()+1}/${now.getDate()} ${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}`;
+    }
+
+    // 貼文系統
+    function getPosts() { return JSON.parse(localStorage.getItem('forumPosts') || '[]'); }
+    function savePosts(posts) { localStorage.setItem('forumPosts', JSON.stringify(posts)); }
+
+    function addPost() {
+        const title = document.getElementById('postTitle').value.trim();
+        const content = document.getElementById('postContent').value.trim();
+        if (!title || !content) return alert('請填寫標題與內容！');
+        
+        const posts = getPosts();
+        posts.unshift({
+            id: Date.now(),
+            title,
+            content,
+            author: userName,
+            date: getTimeString(),
+            replies: []
+        });
+        savePosts(posts);
+        
+        document.getElementById('postTitle').value = '';
+        document.getElementById('postContent').value = '';
+        renderPosts();
+    }
+
+    function addReply(postId) {
+        const input = document.getElementById(`reply-${postId}`);
+        const reply = input.value.trim();
+        if (!reply) return;
+        
+        const posts = getPosts();
+        const post = posts.find(p => p.id === postId);
+        post.replies.push({
+            content: reply,
+            author: userName,
+            date: getTimeString()
+        });
+        savePosts(posts);
+        input.value = '';
+        renderPosts();
+    }
+
+    function togglePost(id) {
+        const content = document.getElementById(`content-${id}`);
+        const replies = document.getElementById(`replies-${id}`);
+        const isShow = content.classList.toggle('show');
+        replies.classList.toggle('show', isShow);
+    }
+
+    function renderPosts() {
+        const posts = getPosts();
+        const list = document.getElementById('postList');
+        
+        if (!posts.length) {
+            list.innerHTML = '<div class="loading">還沒有討論，快來發第一篇！</div>';
+            return;
+        }
+
+        list.innerHTML = posts.map(p => `
+            <div class="post-item">
+                <div class="post-header">
+                    <div class="post-title" onclick="togglePost(${p.id})">
+                        <i class="far fa-comment-dots"></i> ${p.title} (${p.replies.length} 回覆)
+                    </div>
+                    <div class="post-meta">
+                        <i class="far fa-user"></i> ${p.author} &nbsp; <i class="far fa-clock"></i> ${p.date}
+                    </div>
+                </div>
+                <div class="post-content" id="content-${p.id}">${p.content.replace(/\n/g, '<br>')}</div>
+                <div class="replies" id="replies-${p.id}">
+                    ${p.replies.map(r => `
+                        <div class="reply">
+                            <div class="reply-header"><i class="fas fa-user"></i> ${r.author} · ${r.date}</div>
+                            <div class="reply-content">${r.content.replace(/\n/g, '<br>')}</div>
+                        </div>
+                    `).join('')}
+                    <div class="reply-form">
+                        <input type="text" id="reply-${p.id}" placeholder="說點什麼...">
+                        <button onclick="addReply(${p.id})"><i class="fas fa-paper-plane"></i> 送出</button>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // 初始化
+    renderPosts();
+</script>
 </body>
 </html>
