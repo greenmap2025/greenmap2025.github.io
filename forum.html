@@ -3,99 +3,239 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>永續消費交流台</title>
+    <title>永續交流台</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #43A047; --light: #E8F5E9; --bg: #F8FDF8; --text: #2E7D32; --shadow: 0 8px 25px rgba(0,0,0,0.08); --transition: all 0.3s ease; }
-        *{margin:0;padding:0;box-sizing:border-box;}
-        body{font-family:'Noto Sans TC',sans-serif;background:linear-gradient(135deg, #E8F5E9 0%, #F8FDF8 100%);color:var(--text);min-height:100vh;}
-        
-        /* --- 統一導覽列 CSS --- */
+        :root {
+            --primary: #43A047;
+            --secondary: #2E7D32;
+            --bg: #f0f2f5; /* 類似 FB 的淺灰底色 */
+            --card-bg: #ffffff;
+            --text: #1c1e21;
+            --text-light: #65676b;
+            --shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* --- 導覽列 (保持統一) --- */
         nav {
             background: rgba(27, 94, 32, 0.95);
             backdrop-filter: blur(10px);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             position: sticky;
             top: 0;
             z-index: 1000;
-            width: 100%;
         }
         .nav-inner {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 1rem 1.5rem;
+            padding: 0.8rem 1.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
         .logo {
-            font-size: 1.6rem;
-            font-weight: bold;
+            font-size: 1.5rem;
+            font-weight: 700;
             color: white;
+            text-decoration: none;
             display: flex;
             align-items: center;
-            gap: 10px;
-            text-decoration: none;
+            gap: 8px;
         }
         .logo i { color: #8bc34a; }
-        
-        .nav-right { display: flex; align-items: center; gap: 20px; }
-        .nav-links { display: flex; gap: 10px; }
+        .nav-links { display: flex; gap: 15px; }
         .nav-links a {
             color: white;
             text-decoration: none;
             font-weight: 500;
-            padding: 0.5rem 1.2rem;
-            border-radius: 50px;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
             transition: 0.3s;
+            display: flex; align-items: center; gap: 5px;
             font-size: 0.95rem;
-            display: flex;
-            align-items: center;
-            gap: 6px;
         }
         .nav-links a:hover, .nav-links a.active {
-            background: #43A047;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            background: rgba(255,255,255,0.2);
+        }
+        /* 手機版導覽列調整 */
+        @media(max-width:768px) {
+            .nav-inner { flex-direction: column; gap: 10px; }
         }
 
-        /* --- 交流台專用 CSS --- */
-        .container{max-width:900px;margin:2rem auto;padding:0 1rem;}
-        .post-form{background:white;padding:2rem;border-radius:20px;box-shadow:var(--shadow);margin-bottom:2rem;}
-        .post-form h2{font-size:1.5rem;color:var(--primary);margin-bottom:1rem;}
-        .post-form input, .post-form textarea{width:100%;padding:12px 16px;border:2px solid #A5D6A7;border-radius:12px;margin-bottom:1rem;font-size:1rem;outline:none;transition:var(--transition);}
-        .post-form input:focus, .post-form textarea:focus{border-color:var(--primary);}
-        .post-form button{background:var(--primary);color:white;padding:12px 28px;border:none;border-radius:50px;font-weight:600;cursor:pointer;font-size:1rem;transition:var(--transition);}
-        .post-form button:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(67,160,71,.3);}
+        /* --- 主要內容區 --- */
+        .container {
+            max-width: 800px; /* 縮窄一點，讓像手機滑動的感覺 */
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
 
-        .user-setting{background:white;padding:2rem;border-radius:20px;box-shadow:var(--shadow);margin-bottom:2rem;}
-        .user-setting h2{font-size:1.5rem;color:var(--primary);margin-bottom:1rem;}
+        /* 1. 使用者設定區 & 發文區 */
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: 0.3s;
+        }
+        
+        /* 暱稱設定 */
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .avatar-preview {
+            width: 50px; height: 50px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: bold; font-size: 1.2rem;
+        }
+        .user-input-group {
+            flex: 1;
+            display: flex;
+            gap: 10px;
+        }
+        .user-input-group input {
+            flex: 1; padding: 8px 12px; border: 1px solid #ddd; border-radius: 20px; outline: none;
+        }
+        .btn-small {
+            background: var(--text-light); color: white; border: none; padding: 5px 15px; border-radius: 20px; cursor: pointer;
+        }
 
-        .post-list{background:white;border-radius:20px;box-shadow:var(--shadow);padding:1.5rem;overflow-y:auto;max-height:calc(100vh - 300px);}
-        .post-item{padding:1.8rem;border-bottom:1px solid #eee;transition:var(--transition);border-radius:14px;margin-bottom:1rem;background:#fff;}
-        .post-item:hover{background:#f8fff8;transform:translateY(-3px);box-shadow:0 6px 18px rgba(0,0,0,.08);}
-        .post-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:.8rem;}
-        .post-title{font-weight:700;color:var(--primary);font-size:1.25rem;cursor:pointer;}
-        .post-title:hover{color:#388E3C;}
-        .post-meta{font-size:.85rem;color:#666;display:flex;align-items:center;gap:8px;}
-        .post-content{line-height:1.8;color:#444;margin:1rem 0;display:none;}
-        .post-content.show{display:block;}
-        .replies{margin-top:1rem;padding-left:1.5rem;border-left:3px solid var(--light);display:none;}
-        .replies.show{display:block;}
-        .reply{padding:1rem;background:#f9f9f9;border-radius:10px;margin-bottom:.8rem;box-shadow:0 2px 6px rgba(0,0,0,.05);}
-        .reply-header{font-size:.9rem;color:#666;margin-bottom:.4rem;}
-        .reply-content{line-height:1.6;color:#444;}
-        .reply-form{margin-top:1rem;display:flex;gap:8px;}
-        .reply-form input{flex:1;padding:10px;border:2px solid #A5D6A7;border-radius:10px;outline:none;}
-        .reply-form button{background:#388E3C;color:white;padding:10px 18px;border:none;border-radius:10px;cursor:pointer;font-weight:500;}
+        /* 發文區塊 */
+        .create-post h3 { color: var(--secondary); margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+        .tag-selector { display: flex; gap: 10px; margin-bottom: 10px; }
+        .tag-option {
+            padding: 5px 12px; border-radius: 15px; font-size: 0.85rem; cursor: pointer; border: 1px solid #ddd; color: var(--text-light); transition: 0.2s;
+        }
+        .tag-option:hover, .tag-option.selected {
+            background: var(--primary); color: white; border-color: var(--primary);
+        }
+        
+        .post-input-area {
+            width: 100%;
+            border: none;
+            background: #f0f2f5;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 1rem;
+            resize: none;
+            outline: none;
+            margin-bottom: 10px;
+            font-family: inherit;
+        }
+        .post-input-area:focus { background: #e4e6eb; }
+        
+        .btn-post {
+            background: var(--primary); color: white; border: none; padding: 10px 30px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; font-size: 1rem; transition: 0.2s;
+        }
+        .btn-post:hover { background: var(--secondary); transform: translateY(-2px); }
 
-        .loading{text-align:center;padding:3rem;color:#666;font-size:1.1rem;}
-        footer{text-align:center;padding:2.5rem;background:var(--primary);color:white;margin-top:3rem;font-size:.9rem;}
+        /* 2. 貼文列表 (Feed) */
+        .post-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+            overflow: hidden;
+            animation: fadeIn 0.5s ease;
+        }
+        @keyframes fadeIn { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
 
-        @media(max-width:768px) {
-            .nav-inner { flex-direction: column; gap: 1rem; }
-            .nav-links { flex-wrap: wrap; justify-content: center; }
+        .post-header {
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .post-avatar {
+            width: 40px; height: 40px; border-radius: 50%;
+            background: #ddd; color: white;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: bold; font-size: 1.1rem;
+        }
+        .post-info h4 { font-size: 1rem; margin-bottom: 2px; }
+        .post-info span { font-size: 0.8rem; color: var(--text-light); }
+        .post-tag {
+            margin-left: auto;
+            font-size: 0.8rem;
+            padding: 4px 10px;
+            border-radius: 12px;
+            background: #e8f5e9;
+            color: var(--secondary);
+            font-weight: 500;
+        }
+
+        .post-content {
+            padding: 5px 15px 15px 15px;
+            font-size: 1.05rem;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .post-actions {
+            border-top: 1px solid #eee;
+            padding: 10px 15px;
+            display: flex;
+            gap: 20px;
+        }
+        .action-btn {
+            background: none; border: none;
+            color: var(--text-light);
+            font-size: 0.95rem;
+            cursor: pointer;
+            display: flex; align-items: center; gap: 6px;
+            transition: 0.2s;
+            font-family: inherit;
+        }
+        .action-btn:hover { color: var(--primary); }
+        .action-btn.liked { color: #e74c3c; }
+        .action-btn.liked i { animation: pop 0.3s; }
+        @keyframes pop { 50% { transform: scale(1.4); } }
+
+        /* 留言區 */
+        .comments-section {
+            background: #f7f8fa;
+            padding: 10px 15px;
+            display: none; /* 預設隱藏，點擊才開 */
+        }
+        .comments-section.show { display: block; }
+        
+        .comment {
+            display: flex; gap: 10px; margin-bottom: 10px;
+        }
+        .comment-avatar {
+            width: 30px; height: 30px; border-radius: 50%; background: #ccc;
+            display: flex; align-items: center; justify-content: center; font-size: 0.8rem; color: white;
+        }
+        .comment-bubble {
+            background: #e4e6eb; padding: 8px 12px; border-radius: 15px; font-size: 0.9rem; flex: 1;
+        }
+        .comment-user { font-weight: bold; font-size: 0.85rem; margin-bottom: 2px; display: block; color: #111; }
+        
+        .comment-input-box {
+            display: flex; gap: 10px; margin-top: 10px;
+        }
+        .comment-input-box input {
+            flex: 1; padding: 8px 12px; border: 1px solid #ddd; border-radius: 20px; outline: none;
+        }
+
+        .empty-state {
+            text-align: center; color: var(--text-light); padding: 40px;
         }
     </style>
 </head>
@@ -104,157 +244,225 @@
 <nav>
     <div class="nav-inner">
         <a href="index.html" class="logo"><i class="fas fa-leaf"></i> 永續消費地圖</a>
-        
-        <div class="nav-right">
-            <div class="nav-links">
-                <a href="index.html"><i class="fas fa-home"></i> 首頁</a>
-                <a href="map.html"><i class="fas fa-map-marked-alt"></i> 探索地圖</a>
-                <a href="forum.html" class="active"><i class="fas fa-comments"></i> 交流台</a>
-            </div>
-            
-            <span id="userName" style="color: #C8E6C9; font-weight: bold; border-left: 1px solid rgba(255,255,255,0.3); padding-left: 15px; white-space: nowrap;">
-                <i class="fas fa-user-circle"></i> 訪客
-            </span>
+        <div class="nav-links">
+            <a href="index.html"><i class="fas fa-home"></i> 首頁</a>
+            <a href="map.html"><i class="fas fa-map-marked-alt"></i> 探索地圖</a>
+            <a href="forum.html" class="active"><i class="fas fa-comments"></i> 交流台</a>
         </div>
     </div>
 </nav>
 
 <div class="container">
+    
+    <div class="card">
+        <div class="user-profile">
+            <div class="avatar-preview" id="myAvatar">訪</div>
+            <div class="user-input-group">
+                <input type="text" id="usernameInput" placeholder="設定你的暱稱" maxlength="10">
+                <button class="btn-small" onclick="saveUsername()">儲存</button>
+            </div>
+        </div>
 
-    <div class="user-setting">
-        <h2><i class="fas fa-user-edit"></i> 設定你的暱稱</h2>
-        <input type="text" id="userInput" placeholder="輸入你的暱稱">
-        <button onclick="setUserName()">儲存</button>
+        <div class="create-post">
+            <h3><i class="fas fa-pen-fancy"></i> 建立貼文</h3>
+            
+            <div class="tag-selector" id="tagSelector">
+                <div class="tag-option selected" onclick="selectTag(this, '心得')">🌱 心得分享</div>
+                <div class="tag-option" onclick="selectTag(this, '推薦')">👍 好店推薦</div>
+                <div class="tag-option" onclick="selectTag(this, '提問')">❓ 永續提問</div>
+            </div>
+
+            <textarea id="postContent" class="post-input-area" rows="3" placeholder="在想什麼？分享你的永續生活發現..."></textarea>
+            <button class="btn-post" onclick="submitPost()">發布貼文</button>
+        </div>
     </div>
 
-    <div class="post-form">
-        <h2><i class="fas fa-pen-nib"></i> 分享你的永續心得</h2>
-        <input type="text" id="postTitle" placeholder="標題（如：萬華這家超推！）">
-        <textarea id="postContent" rows="4" placeholder="寫下你的發現、問題或推薦..."></textarea>
-        <button onclick="addPost()">發布貼文</button>
-    </div>
+    <div id="feedArea">
+        </div>
 
-    <div class="post-list" id="postList">
-        <div class="loading">載入中...</div>
-    </div>
 </div>
 
-<footer><p>高三專題製作｜永續消費交流台 © 2025</p></footer>
-
 <script>
-    // 使用者登入狀態
-    let userName = localStorage.getItem('userName') || '訪客';
-    function updateDisplayUser() {
-        document.getElementById('userName').innerHTML = `<i class="fas fa-user-circle"></i> ${userName}`;
-        document.getElementById('userInput').value = userName;
-    }
-    updateDisplayUser();
-
-    function setUserName() {
-        const name = document.getElementById('userInput').value.trim();
-        if (!name) {
-            alert('請輸入有效的暱稱！');
-            return;
-        }
-        userName = name;
-        localStorage.setItem('userName', name);
-        updateDisplayUser();
-        alert('暱稱已更新！');
-    }
-
-    // 取得當前時間字串
-    function getTimeString() {
-        const now = new Date();
-        return `${now.getFullYear()}/${now.getMonth()+1}/${now.getDate()} ${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}`;
-    }
-
-    // 貼文系統
-    function getPosts() { return JSON.parse(localStorage.getItem('forumPosts') || '[]'); }
-    function savePosts(posts) { localStorage.setItem('forumPosts', JSON.stringify(posts)); }
-
-    function addPost() {
-        const title = document.getElementById('postTitle').value.trim();
-        const content = document.getElementById('postContent').value.trim();
-        if (!title || !content) return alert('請填寫標題與內容！');
-        
-        const posts = getPosts();
-        posts.unshift({
-            id: Date.now(),
-            title,
-            content,
-            author: userName,
-            date: getTimeString(),
-            replies: []
-        });
-        savePosts(posts);
-        
-        document.getElementById('postTitle').value = '';
-        document.getElementById('postContent').value = '';
-        renderPosts();
-    }
-
-    function addReply(postId) {
-        const input = document.getElementById(`reply-${postId}`);
-        const reply = input.value.trim();
-        if (!reply) return;
-        
-        const posts = getPosts();
-        const post = posts.find(p => p.id === postId);
-        post.replies.push({
-            content: reply,
-            author: userName,
-            date: getTimeString()
-        });
-        savePosts(posts);
-        input.value = '';
-        renderPosts();
-    }
-
-    function togglePost(id) {
-        const content = document.getElementById(`content-${id}`);
-        const replies = document.getElementById(`replies-${id}`);
-        const isShow = content.classList.toggle('show');
-        replies.classList.toggle('show', isShow);
-    }
-
-    function renderPosts() {
-        const posts = getPosts();
-        const list = document.getElementById('postList');
-        
-        if (!posts.length) {
-            list.innerHTML = '<div class="loading">還沒有討論，快來發第一篇！</div>';
-            return;
-        }
-
-        list.innerHTML = posts.map(p => `
-            <div class="post-item">
-                <div class="post-header">
-                    <div class="post-title" onclick="togglePost(${p.id})">
-                        <i class="far fa-comment-dots"></i> ${p.title} (${p.replies.length} 回覆)
-                    </div>
-                    <div class="post-meta">
-                        <i class="far fa-user"></i> ${p.author} &nbsp; <i class="far fa-clock"></i> ${p.date}
-                    </div>
-                </div>
-                <div class="post-content" id="content-${p.id}">${p.content.replace(/\n/g, '<br>')}</div>
-                <div class="replies" id="replies-${p.id}">
-                    ${p.replies.map(r => `
-                        <div class="reply">
-                            <div class="reply-header"><i class="fas fa-user"></i> ${r.author} · ${r.date}</div>
-                            <div class="reply-content">${r.content.replace(/\n/g, '<br>')}</div>
-                        </div>
-                    `).join('')}
-                    <div class="reply-form">
-                        <input type="text" id="reply-${p.id}" placeholder="說點什麼...">
-                        <button onclick="addReply(${p.id})"><i class="fas fa-paper-plane"></i> 送出</button>
-                    </div>
-                </div>
-            </div>
-        `).join('');
-    }
-
+    // --- 1. 核心資料邏輯 ---
+    let currentUser = localStorage.getItem('forum_user') || '訪客';
+    let currentTag = '心得';
+    
     // 初始化
-    renderPosts();
+    document.getElementById('usernameInput').value = currentUser;
+    updateAvatarUI(currentUser);
+    renderFeed();
+
+    // 儲存暱稱
+    function saveUsername() {
+        const name = document.getElementById('usernameInput').value.trim();
+        if(!name) return alert("請輸入暱稱！");
+        currentUser = name;
+        localStorage.setItem('forum_user', name);
+        updateAvatarUI(name);
+        alert("暱稱已更新為：" + name);
+    }
+
+    // 更新頭貼顏色與文字
+    function updateAvatarUI(name) {
+        const avatar = document.getElementById('myAvatar');
+        avatar.innerText = name[0];
+        avatar.style.backgroundColor = stringToColor(name);
+    }
+
+    // 選擇標籤
+    function selectTag(el, tag) {
+        document.querySelectorAll('.tag-option').forEach(d => d.classList.remove('selected'));
+        el.classList.add('selected');
+        currentTag = tag;
+    }
+
+    // 產生顏色 (根據字串固定產生某種顏色)
+    function stringToColor(str) {
+        let hash = 0;
+        for (let i = 0; i < str.length; i++) {
+            hash = str.charCodeAt(i) + ((hash << 5) - hash);
+        }
+        const c = (hash & 0x00FFFFFF).toString(16).toUpperCase();
+        return '#' + "00000".substring(0, 6 - c.length) + c;
+    }
+
+    // --- 2. 發文功能 ---
+    function submitPost() {
+        const content = document.getElementById('postContent').value.trim();
+        if(!content) return alert("內容不能為空喔！");
+
+        const posts = JSON.parse(localStorage.getItem('forum_posts') || '[]');
+        
+        const newPost = {
+            id: Date.now(),
+            user: currentUser,
+            content: content,
+            tag: currentTag,
+            time: new Date().toLocaleString('zh-TW', { hour12:false, month:'numeric', day:'numeric', hour:'2-digit', minute:'2-digit' }),
+            likes: 0,
+            isLiked: false, // 本地模擬是否按讚
+            comments: []
+        };
+
+        posts.unshift(newPost); // 加到最前面
+        localStorage.setItem('forum_posts', JSON.stringify(posts));
+        
+        document.getElementById('postContent').value = ""; // 清空
+        renderFeed(); // 重新渲染
+    }
+
+    // --- 3. 渲染列表 (最重要) ---
+    function renderFeed() {
+        const posts = JSON.parse(localStorage.getItem('forum_posts') || '[]');
+        const feed = document.getElementById('feedArea');
+        feed.innerHTML = "";
+
+        if(posts.length === 0) {
+            feed.innerHTML = `<div class="empty-state">目前還沒有貼文，快來搶頭香！</div>`;
+            return;
+        }
+
+        posts.forEach(post => {
+            const avatarColor = stringToColor(post.user);
+            const likeClass = post.isLiked ? 'liked' : '';
+            
+            // 產生留言 HTML
+            let commentsHtml = post.comments.map(c => `
+                <div class="comment">
+                    <div class="comment-avatar" style="background:${stringToColor(c.user)}">${c.user[0]}</div>
+                    <div class="comment-bubble">
+                        <span class="comment-user">${c.user}</span>
+                        ${c.content}
+                    </div>
+                </div>
+            `).join('');
+
+            const html = `
+                <div class="post-card">
+                    <div class="post-header">
+                        <div class="post-avatar" style="background:${avatarColor}">${post.user[0]}</div>
+                        <div class="post-info">
+                            <h4>${post.user}</h4>
+                            <span>${post.time}</span>
+                        </div>
+                        <span class="post-tag"># ${post.tag}</span>
+                    </div>
+                    <div class="post-content">
+                        ${post.content.replace(/\n/g, '<br>')}
+                    </div>
+                    <div class="post-actions">
+                        <button class="action-btn ${likeClass}" onclick="toggleLike(${post.id})">
+                            <i class="fas fa-heart"></i> ${post.likes}
+                        </button>
+                        <button class="action-btn" onclick="toggleComment(${post.id})">
+                            <i class="fas fa-comment-alt"></i> ${post.comments.length} 留言
+                        </button>
+                        <button class="action-btn" onclick="deletePost(${post.id})" style="margin-left:auto; color:#999;">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="comments-section" id="comment-box-${post.id}">
+                        <div id="comment-list-${post.id}">${commentsHtml}</div>
+                        <div class="comment-input-box">
+                            <input type="text" id="input-${post.id}" placeholder="留言...">
+                            <button class="btn-small" style="background:var(--primary)" onclick="addComment(${post.id})">送出</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            feed.innerHTML += html;
+        });
+    }
+
+    // --- 4. 互動功能 ---
+    function toggleLike(id) {
+        const posts = JSON.parse(localStorage.getItem('forum_posts'));
+        const post = posts.find(p => p.id === id);
+        
+        if(post.isLiked) {
+            post.likes--;
+            post.isLiked = false;
+        } else {
+            post.likes++;
+            post.isLiked = true;
+        }
+        localStorage.setItem('forum_posts', JSON.stringify(posts));
+        renderFeed();
+    }
+
+    function toggleComment(id) {
+        const box = document.getElementById(`comment-box-${id}`);
+        box.classList.toggle('show');
+    }
+
+    function addComment(id) {
+        const input = document.getElementById(`input-${id}`);
+        const val = input.value.trim();
+        if(!val) return;
+
+        const posts = JSON.parse(localStorage.getItem('forum_posts'));
+        const post = posts.find(p => p.id === id);
+        
+        post.comments.push({
+            user: currentUser,
+            content: val
+        });
+        
+        localStorage.setItem('forum_posts', JSON.stringify(posts));
+        renderFeed();
+        // 保持留言區開啟
+        setTimeout(() => document.getElementById(`comment-box-${id}`).classList.add('show'), 50);
+    }
+
+    function deletePost(id) {
+        if(!confirm("確定要刪除這篇貼文嗎？")) return;
+        let posts = JSON.parse(localStorage.getItem('forum_posts'));
+        posts = posts.filter(p => p.id !== id);
+        localStorage.setItem('forum_posts', JSON.stringify(posts));
+        renderFeed();
+    }
 </script>
+
 </body>
 </html>
