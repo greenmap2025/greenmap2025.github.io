@@ -22,7 +22,7 @@
             opacity: 0.1; pointer-events: none;
         }
 
-        /* --- 統一導覽列樣式 --- */
+        /* --- 導覽列 --- */
         nav {
             background: rgba(27, 94, 32, 0.95);
             backdrop-filter: blur(10px);
@@ -52,7 +52,6 @@
         .logo i { color: #8bc34a; animation: pulse 2s infinite; }
         @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.1); } }
         
-        .nav-right { display: flex; align-items: center; gap: 20px; }
         .nav-links { display: flex; gap: 10px; }
         .nav-links a {
             color: white;
@@ -72,7 +71,7 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
 
-        /* --- 頁面內容樣式 --- */
+        /* --- 頁面內容 --- */
         .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; position: relative; z-index: 1; }
 
         .hero {
@@ -193,12 +192,10 @@
 <nav>
     <div class="nav-inner">
         <a href="index.html" class="logo"><i class="fas fa-leaf"></i> 永續消費地圖</a>
-        <div class="nav-right">
-            <div class="nav-links">
-                <a href="index.html" class="active"><i class="fas fa-home"></i> 首頁</a>
-                <a href="map.html"><i class="fas fa-map-marked-alt"></i> 探索地圖</a>
-                <a href="forum.html"><i class="fas fa-comments"></i> 交流台</a>
-            </div>
+        <div class="nav-links">
+            <a href="index.html" class="active"><i class="fas fa-home"></i> 首頁</a>
+            <a href="map.html"><i class="fas fa-map-marked-alt"></i> 探索地圖</a>
+            <a href="forum.html"><i class="fas fa-comments"></i> 交流台</a>
         </div>
     </div>
 </nav>
@@ -227,26 +224,6 @@
                 <div class="service-icon"><i class="fas fa-heart"></i></div>
                 <h3>收藏與分享</h3>
                 <p>喜歡的地點可加入收藏或分享給朋友，一起守護地球。</p>
-            </div>
-        </div>
-    </div>
-
-    <div class="updates">
-        <h2>最新消息</h2>
-        <div class="timeline">
-            <div class="update-item">
-                <div class="update-date">2025/10/01</div>
-                <div class="update-content">
-                    <strong>環保地圖 2.0 正式上線！</strong><br>
-                    全新介面、導航功能更新，支援即時定位與路線規劃。
-                </div>
-            </div>
-            <div class="update-item">
-                <div class="update-date">2025/09/25</div>
-                <div class="update-content">
-                    <strong>新增「無塑商店」分類</strong><br>
-                    全台超過 50 間無塑商店上架，快來探索你身邊的綠色好店。
-                </div>
             </div>
         </div>
     </div>
