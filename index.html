@@ -22,40 +22,57 @@
             opacity: 0.1; pointer-events: none;
         }
 
+        /* --- 統一導覽列樣式 --- */
         nav {
             background: rgba(27, 94, 32, 0.95);
             backdrop-filter: blur(10px);
-            color: white;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 20px rgba(0,0,0,.15);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
             position: sticky;
             top: 0;
             z-index: 1000;
-            flex-wrap: wrap;
-            gap: 1rem;
+            width: 100%;
         }
-        .logo { font-size: 1.7rem; font-weight: bold; display: flex; align-items: center; gap: .5rem; }
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
         .logo i { color: #8bc34a; animation: pulse 2s infinite; }
         @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.1); } }
-        .nav-links {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
+        
+        .nav-right { display: flex; align-items: center; gap: 20px; }
+        .nav-links { display: flex; gap: 10px; }
         .nav-links a {
             color: white;
             text-decoration: none;
             font-weight: 500;
-            padding: .6rem 1.4rem;
+            padding: 0.5rem 1.2rem;
             border-radius: 50px;
-            transition: .3s;
-            font-size: .95rem;
+            transition: 0.3s;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
-        .nav-links a:hover { background: #43A047; transform: translateY(-2px); }
+        .nav-links a:hover, .nav-links a.active {
+            background: #43A047;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
 
+        /* --- 頁面內容樣式 --- */
         .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; position: relative; z-index: 1; }
 
         .hero {
@@ -90,6 +107,7 @@
             margin: 3rem 0 2rem;
             position: relative;
             display: inline-block;
+            width: 100%;
         }
         .services h2::after, .updates h2::after, .hotspots h2::after {
             content: ''; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%);
@@ -156,43 +174,36 @@
             box-shadow: 0 5px 15px rgba(0,0,0,.08);
         }
 
-        .spot-img {
-            height: 200px; overflow: hidden; border-radius: 16px 16px 0 0;
-        }
-        .spot-img img {
-            width: 100%; height: 100%; object-fit: cover; transition: .5s;
-        }
+        .spot-img { height: 200px; overflow: hidden; border-radius: 16px 16px 0 0; }
+        .spot-img img { width: 100%; height: 100%; object-fit: cover; transition: .5s; }
         .spot-card:hover .spot-img img { transform: scale(1.15); }
 
-        footer {
-            text-align: center;
-            padding: 3rem;
-            background: #1B5E20;
-            color: white;
-            font-size: 0.9rem;
-            margin-top: 4rem;
-        }
+        footer { text-align: center; padding: 3rem; background: #1B5E20; color: white; font-size: 0.9rem; margin-top: 4rem; }
 
         @media(max-width:768px) {
+            .nav-inner { flex-direction: column; gap: 1rem; }
+            .nav-links { flex-wrap: wrap; justify-content: center; }
             .hero h1 { font-size: 2.2rem; }
             .service-cards, .spot-cards { grid-template-columns: 1fr; }
-            .nav-links { justify-content: center; }
         }
     </style>
 </head>
 <body>
 
 <nav>
-    <div class="logo"><i class="fas fa-leaf"></i> 永續消費地圖</div>
-    <div class="nav-links">
-        <a href="index.html"><i class="fas fa-home"></i> 首頁</a>
-        <a href="map.html"><i class="fas fa-map-marked-alt"></i> 探索地圖</a>
-        <a href="forum.html"><i class="fas fa-comments"></i> 交流台</a>
+    <div class="nav-inner">
+        <a href="index.html" class="logo"><i class="fas fa-leaf"></i> 永續消費地圖</a>
+        <div class="nav-right">
+            <div class="nav-links">
+                <a href="index.html" class="active"><i class="fas fa-home"></i> 首頁</a>
+                <a href="map.html"><i class="fas fa-map-marked-alt"></i> 探索地圖</a>
+                <a href="forum.html"><i class="fas fa-comments"></i> 交流台</a>
+            </div>
+        </div>
     </div>
 </nav>
 
 <div class="container">
-
     <div class="hero">
         <h1>從一餐開始，改變地球</h1>
         <p>自備容器 × 無包裝商店 × 綠色生活從你我開始</p>
@@ -272,7 +283,6 @@
             </div>
         </div>
     </div>
-
 </div>
 
 <footer><p>高三專題製作｜永續消費地圖團隊 © 2025</p></footer>
