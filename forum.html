@@ -3,240 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>永續交流台</title>
+    <title>永續交流台 (連線版)</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
+        /* --- 1. 全域樣式 (跟首頁、地圖完全統一) --- */
         :root {
-            --primary: #43A047;
-            --secondary: #2E7D32;
-            --bg: #f0f2f5; /* 類似 FB 的淺灰底色 */
-            --card-bg: #ffffff;
-            --text: #1c1e21;
-            --text-light: #65676b;
-            --shadow: 0 4px 12px rgba(0,0,0,0.1);
+            --primary: #43A047; --secondary: #2E7D32; 
+            --text: #1c1e21; --text-light: #65676b;
+            --shadow: 0 8px 30px rgba(0,0,0,0.1);
         }
         * { margin:0; padding:0; box-sizing:border-box; }
+        
         body {
             font-family: 'Noto Sans TC', sans-serif;
-            background: var(--bg);
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
             color: var(--text);
             min-height: 100vh;
+            position: relative;
         }
-
-        /* --- 導覽列 (保持統一) --- */
-        nav {
-            background: rgba(27, 94, 32, 0.95);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-        .nav-inner {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0.8rem 1.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: white;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .logo i { color: #8bc34a; }
-        .nav-links { display: flex; gap: 15px; }
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            transition: 0.3s;
-            display: flex; align-items: center; gap: 5px;
-            font-size: 0.95rem;
-        }
-        .nav-links a:hover, .nav-links a.active {
-            background: rgba(255,255,255,0.2);
-        }
-        /* 手機版導覽列調整 */
-        @media(max-width:768px) {
-            .nav-inner { flex-direction: column; gap: 10px; }
-        }
-
-        /* --- 主要內容區 --- */
-        .container {
-            max-width: 800px; /* 縮窄一點，讓像手機滑動的感覺 */
-            margin: 2rem auto;
-            padding: 0 1rem;
-        }
-
-        /* 1. 使用者設定區 & 發文區 */
-        .card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            box-shadow: var(--shadow);
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            transition: 0.3s;
+        body::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="%2343A047"/><circle cx="80" cy="30" r="1.5" fill="%2369f0ae"/><circle cx="50" cy="70" r="2" fill="%238bc34a"/></svg>') repeat;
+            opacity: 0.1; pointer-events: none; z-index: -1;
         }
         
-        /* 暱稱設定 */
-        .user-profile {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #eee;
+        /* --- 2. 導覽列 --- */
+        nav { 
+            background: rgba(27, 94, 32, 0.95); 
+            backdrop-filter: blur(10px); 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15); 
+            position: sticky; top: 0; z-index: 1000; 
         }
-        .avatar-preview {
-            width: 50px; height: 50px;
-            background: var(--primary);
-            color: white;
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-weight: bold; font-size: 1.2rem;
-        }
-        .user-input-group {
-            flex: 1;
-            display: flex;
-            gap: 10px;
-        }
-        .user-input-group input {
-            flex: 1; padding: 8px 12px; border: 1px solid #ddd; border-radius: 20px; outline: none;
-        }
-        .btn-small {
-            background: var(--text-light); color: white; border: none; padding: 5px 15px; border-radius: 20px; cursor: pointer;
+        .nav-inner { max-width: 1200px; margin: 0 auto; padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.6rem; font-weight: bold; color: white; text-decoration: none; display: flex; align-items: center; gap: 10px; }
+        .logo i { color: #8bc34a; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        
+        .nav-links { display: flex; gap: 10px; }
+        .nav-links a { color: white; text-decoration: none; font-weight: 500; padding: 0.5rem 1.2rem; border-radius: 50px; transition: 0.3s; display: flex; align-items: center; gap: 6px; font-size: 0.95rem; }
+        .nav-links a:hover, .nav-links a.active { background: #43A047; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        @media(max-width:768px) { 
+            .nav-inner { flex-direction: column; gap: 10px; padding: 0.8rem 1rem; } 
+            .nav-links a span { display: none; } 
         }
 
-        /* 發文區塊 */
-        .create-post h3 { color: var(--secondary); margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
-        .tag-selector { display: flex; gap: 10px; margin-bottom: 10px; }
-        .tag-option {
-            padding: 5px 12px; border-radius: 15px; font-size: 0.85rem; cursor: pointer; border: 1px solid #ddd; color: var(--text-light); transition: 0.2s;
-        }
-        .tag-option:hover, .tag-option.selected {
-            background: var(--primary); color: white; border-color: var(--primary);
+        /* --- 3. 交流台樣式 --- */
+        .container { max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
+        
+        .card, .post-card { 
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 20px; 
+            box-shadow: var(--shadow); 
+            padding: 1.5rem; 
+            margin-bottom: 1.5rem; 
         }
         
-        .post-input-area {
-            width: 100%;
-            border: none;
-            background: #f0f2f5;
-            padding: 15px;
-            border-radius: 12px;
-            font-size: 1rem;
-            resize: none;
-            outline: none;
-            margin-bottom: 10px;
-            font-family: inherit;
-        }
-        .post-input-area:focus { background: #e4e6eb; }
-        
-        .btn-post {
-            background: var(--primary); color: white; border: none; padding: 10px 30px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; font-size: 1rem; transition: 0.2s;
-        }
-        .btn-post:hover { background: var(--secondary); transform: translateY(-2px); }
+        .user-profile { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid rgba(0,0,0,0.1); }
+        .avatar-preview { width: 50px; height: 50px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem; box-shadow: 0 4px 10px rgba(67,160,71,0.3); }
+        .user-input-group { flex: 1; display: flex; gap: 10px; }
+        .user-input-group input { flex: 1; padding: 8px 15px; border: 2px solid transparent; background: rgba(255,255,255,0.8); border-radius: 20px; outline: none; transition: 0.3s; }
+        .user-input-group input:focus { border-color: var(--primary); background: white; }
+        .btn-small { background: #757575; color: white; border: none; padding: 5px 15px; border-radius: 20px; cursor: pointer; transition:0.2s; }
 
-        /* 2. 貼文列表 (Feed) */
-        .post-card {
-            background: white;
-            border-radius: 12px;
-            box-shadow: var(--shadow);
-            margin-bottom: 20px;
-            overflow: hidden;
-            animation: fadeIn 0.5s ease;
-        }
+        .create-post h3 { color: var(--secondary); margin-bottom: 15px; display: flex; align-items: center; gap: 8px; font-weight:700; }
+        .tag-selector { display: flex; gap: 10px; margin-bottom: 15px; }
+        .tag-option { padding: 6px 14px; border-radius: 20px; font-size: 0.9rem; cursor: pointer; border: 1px solid #ccc; color: #666; transition: 0.2s; background: rgba(255,255,255,0.5); }
+        .tag-option:hover { transform: translateY(-2px); }
+        .tag-option.selected { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 10px rgba(67,160,71,0.3); }
+        
+        .post-input-area { width: 100%; border: 2px solid transparent; background: rgba(255,255,255,0.8); padding: 15px; border-radius: 15px; font-size: 1rem; resize: none; outline: none; margin-bottom: 15px; font-family: inherit; transition:0.3s; }
+        .post-input-area:focus { background: white; border-color: var(--primary); }
+        
+        .btn-post { background: linear-gradient(45deg, #43A047, #66bb6a); color: white; border: none; padding: 12px 30px; border-radius: 50px; font-weight: bold; cursor: pointer; width: 100%; font-size: 1rem; transition: 0.2s; box-shadow: 0 4px 15px rgba(67,160,71,0.3); }
+        .btn-post:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(67,160,71,0.4); }
+
+        .post-card { overflow: hidden; animation: fadeIn 0.5s ease; padding: 0; }
         @keyframes fadeIn { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
-
-        .post-header {
-            padding: 15px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .post-avatar {
-            width: 40px; height: 40px; border-radius: 50%;
-            background: #ddd; color: white;
-            display: flex; align-items: center; justify-content: center;
-            font-weight: bold; font-size: 1.1rem;
-        }
-        .post-info h4 { font-size: 1rem; margin-bottom: 2px; }
-        .post-info span { font-size: 0.8rem; color: var(--text-light); }
-        .post-tag {
-            margin-left: auto;
-            font-size: 0.8rem;
-            padding: 4px 10px;
-            border-radius: 12px;
-            background: #e8f5e9;
-            color: var(--secondary);
-            font-weight: 500;
-        }
-
-        .post-content {
-            padding: 5px 15px 15px 15px;
-            font-size: 1.05rem;
-            line-height: 1.6;
-            color: #333;
-        }
-
-        .post-actions {
-            border-top: 1px solid #eee;
-            padding: 10px 15px;
-            display: flex;
-            gap: 20px;
-        }
-        .action-btn {
-            background: none; border: none;
-            color: var(--text-light);
-            font-size: 0.95rem;
-            cursor: pointer;
-            display: flex; align-items: center; gap: 6px;
-            transition: 0.2s;
-            font-family: inherit;
-        }
+        
+        .post-header { padding: 20px; display: flex; align-items: center; gap: 12px; }
+        .post-avatar { width: 42px; height: 42px; border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.1rem; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .post-info h4 { font-size: 1.05rem; margin-bottom: 3px; color: #2e7d32; }
+        .post-info span { font-size: 0.8rem; color: #888; }
+        .post-tag { margin-left: auto; font-size: 0.8rem; padding: 5px 12px; border-radius: 20px; background: #e8f5e9; color: var(--secondary); font-weight: 600; }
+        
+        .post-content { padding: 0 20px 20px 20px; font-size: 1.1rem; line-height: 1.7; color: #333; }
+        
+        .post-actions { border-top: 1px solid rgba(0,0,0,0.05); padding: 12px 20px; display: flex; gap: 20px; background: rgba(255,255,255,0.3); }
+        .action-btn { background: none; border: none; color: #666; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: 0.2s; font-family: inherit; }
         .action-btn:hover { color: var(--primary); }
         .action-btn.liked { color: #e74c3c; }
-        .action-btn.liked i { animation: pop 0.3s; }
-        @keyframes pop { 50% { transform: scale(1.4); } }
 
-        /* 留言區 */
-        .comments-section {
-            background: #f7f8fa;
-            padding: 10px 15px;
-            display: none; /* 預設隱藏，點擊才開 */
-        }
+        .comments-section { background: rgba(245, 245, 245, 0.6); padding: 15px 20px; display: none; }
         .comments-section.show { display: block; }
+        .comment { display: flex; gap: 10px; margin-bottom: 12px; }
+        .comment-avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; color: white; flex-shrink:0; }
+        .comment-bubble { background: white; padding: 10px 15px; border-radius: 18px; font-size: 0.95rem; flex: 1; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .comment-user { font-weight: bold; font-size: 0.85rem; margin-bottom: 4px; display: block; color: var(--secondary); }
+        .comment-input-box { display: flex; gap: 10px; margin-top: 15px; }
+        .comment-input-box input { flex: 1; padding: 10px 15px; border: 1px solid #ddd; border-radius: 25px; outline: none; }
         
-        .comment {
-            display: flex; gap: 10px; margin-bottom: 10px;
-        }
-        .comment-avatar {
-            width: 30px; height: 30px; border-radius: 50%; background: #ccc;
-            display: flex; align-items: center; justify-content: center; font-size: 0.8rem; color: white;
-        }
-        .comment-bubble {
-            background: #e4e6eb; padding: 8px 12px; border-radius: 15px; font-size: 0.9rem; flex: 1;
-        }
-        .comment-user { font-weight: bold; font-size: 0.85rem; margin-bottom: 2px; display: block; color: #111; }
-        
-        .comment-input-box {
-            display: flex; gap: 10px; margin-top: 10px;
-        }
-        .comment-input-box input {
-            flex: 1; padding: 8px 12px; border: 1px solid #ddd; border-radius: 20px; outline: none;
-        }
-
-        .empty-state {
-            text-align: center; color: var(--text-light); padding: 40px;
-        }
+        .empty-state { text-align: center; color: #666; padding: 40px; font-size: 1.1rem; }
     </style>
 </head>
 <body>
@@ -253,7 +122,6 @@
 </nav>
 
 <div class="container">
-    
     <div class="card">
         <div class="user-profile">
             <div class="avatar-preview" id="myAvatar">訪</div>
@@ -265,36 +133,54 @@
 
         <div class="create-post">
             <h3><i class="fas fa-pen-fancy"></i> 建立貼文</h3>
-            
-            <div class="tag-selector" id="tagSelector">
+            <div class="tag-selector">
                 <div class="tag-option selected" onclick="selectTag(this, '心得')">🌱 心得分享</div>
                 <div class="tag-option" onclick="selectTag(this, '推薦')">👍 好店推薦</div>
                 <div class="tag-option" onclick="selectTag(this, '提問')">❓ 永續提問</div>
             </div>
-
             <textarea id="postContent" class="post-input-area" rows="3" placeholder="在想什麼？分享你的永續生活發現..."></textarea>
-            <button class="btn-post" onclick="submitPost()">發布貼文</button>
+            <button class="btn-post" id="submitBtn">發布貼文</button>
         </div>
     </div>
 
     <div id="feedArea">
-        </div>
-
+        <div class="empty-state"><i class="fas fa-spinner fa-spin"></i> 正在連線到雲端資料庫...</div>
+    </div>
 </div>
 
-<script>
-    // --- 1. 核心資料邏輯 ---
+<script type="module">
+    // ⚠️ 修復重點 1: 使用穩定的 10.12.0 版本，確保 CDN 可用
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    // ⚠️ 修復重點 2: 補上 firestore 模組，這樣才能存取資料庫
+    import { getFirestore, collection, addDoc, onSnapshot, updateDoc, doc, arrayUnion, orderBy, query, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    // ⚠️ 修復重點 3: 填入你剛剛給的正確 Config (包含 measurementId)
+    const firebaseConfig = {
+      apiKey: "AIzaSyDFfPxs5gXDcjLxQGGCQUm_aaNdXc6pdto",
+      authDomain: "greenmap2025-e0c58.firebaseapp.com",
+      projectId: "greenmap2025-e0c58",
+      storageBucket: "greenmap2025-e0c58.firebasestorage.app",
+      messagingSenderId: "712824475160",
+      appId: "1:712824475160:web:a65b951094e50f3a3f3d6d",
+      measurementId: "G-RS4PXF9V7P"
+    };
+  
+    // 初始化 Firebase 與 Firestore
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+  
+    // --- 程式邏輯開始 ---
     let currentUser = localStorage.getItem('forum_user') || '訪客';
     let currentTag = '心得';
     
-    // 初始化
-    document.getElementById('usernameInput').value = currentUser;
+    // 初始化 UI
+    const nameInput = document.getElementById('usernameInput');
+    nameInput.value = currentUser;
     updateAvatarUI(currentUser);
-    renderFeed();
 
-    // 儲存暱稱
-    function saveUsername() {
-        const name = document.getElementById('usernameInput').value.trim();
+    // 全域變數方便 HTML onclick 呼叫
+    window.saveUsername = function() {
+        const name = nameInput.value.trim();
         if(!name) return alert("請輸入暱稱！");
         currentUser = name;
         localStorage.setItem('forum_user', name);
@@ -302,80 +188,86 @@
         alert("暱稱已更新為：" + name);
     }
 
-    // 更新頭貼顏色與文字
+    window.selectTag = function(el, tag) {
+        document.querySelectorAll('.tag-option').forEach(d => d.classList.remove('selected'));
+        el.classList.add('selected');
+        currentTag = tag;
+    }
+
     function updateAvatarUI(name) {
         const avatar = document.getElementById('myAvatar');
         avatar.innerText = name[0];
         avatar.style.backgroundColor = stringToColor(name);
     }
 
-    // 選擇標籤
-    function selectTag(el, tag) {
-        document.querySelectorAll('.tag-option').forEach(d => d.classList.remove('selected'));
-        el.classList.add('selected');
-        currentTag = tag;
-    }
-
-    // 產生顏色 (根據字串固定產生某種顏色)
     function stringToColor(str) {
         let hash = 0;
-        for (let i = 0; i < str.length; i++) {
-            hash = str.charCodeAt(i) + ((hash << 5) - hash);
-        }
+        for (let i = 0; i < str.length; i++) { hash = str.charCodeAt(i) + ((hash << 5) - hash); }
         const c = (hash & 0x00FFFFFF).toString(16).toUpperCase();
         return '#' + "00000".substring(0, 6 - c.length) + c;
     }
 
-    // --- 2. 發文功能 ---
-    function submitPost() {
+    // 發布貼文
+    document.getElementById('submitBtn').addEventListener('click', async () => {
         const content = document.getElementById('postContent').value.trim();
         if(!content) return alert("內容不能為空喔！");
 
-        const posts = JSON.parse(localStorage.getItem('forum_posts') || '[]');
-        
-        const newPost = {
-            id: Date.now(),
-            user: currentUser,
-            content: content,
-            tag: currentTag,
-            time: new Date().toLocaleString('zh-TW', { hour12:false, month:'numeric', day:'numeric', hour:'2-digit', minute:'2-digit' }),
-            likes: 0,
-            isLiked: false, // 本地模擬是否按讚
-            comments: []
-        };
+        const btn = document.getElementById('submitBtn');
+        btn.disabled = true;
+        btn.innerText = "發布中...";
 
-        posts.unshift(newPost); // 加到最前面
-        localStorage.setItem('forum_posts', JSON.stringify(posts));
-        
-        document.getElementById('postContent').value = ""; // 清空
-        renderFeed(); // 重新渲染
-    }
+        try {
+            await addDoc(collection(db, "posts"), {
+                user: currentUser,
+                content: content,
+                tag: currentTag,
+                timestamp: Date.now(),
+                timeStr: new Date().toLocaleString('zh-TW', { month:'numeric', day:'numeric', hour:'2-digit', minute:'2-digit' }),
+                likes: 0,
+                comments: []
+            });
+            document.getElementById('postContent').value = "";
+        } catch (e) {
+            console.error("Error adding document: ", e);
+            alert("發送失敗，請檢查網路！(或確認 Firebase Firestore 有開啟 Test Mode)");
+        }
+        btn.disabled = false;
+        btn.innerText = "發布貼文";
+    });
 
-    // --- 3. 渲染列表 (最重要) ---
-    function renderFeed() {
-        const posts = JSON.parse(localStorage.getItem('forum_posts') || '[]');
+    // 即時監聽資料庫
+    const q = query(collection(db, "posts"), orderBy("timestamp", "desc"));
+    
+    onSnapshot(q, (snapshot) => {
         const feed = document.getElementById('feedArea');
         feed.innerHTML = "";
 
-        if(posts.length === 0) {
+        if(snapshot.empty) {
             feed.innerHTML = `<div class="empty-state">目前還沒有貼文，快來搶頭香！</div>`;
             return;
         }
 
-        posts.forEach(post => {
-            const avatarColor = stringToColor(post.user);
-            const likeClass = post.isLiked ? 'liked' : '';
+        snapshot.forEach((docSnap) => {
+            const post = docSnap.data();
+            const pid = docSnap.id; 
             
-            // 產生留言 HTML
-            let commentsHtml = post.comments.map(c => `
-                <div class="comment">
-                    <div class="comment-avatar" style="background:${stringToColor(c.user)}">${c.user[0]}</div>
-                    <div class="comment-bubble">
-                        <span class="comment-user">${c.user}</span>
-                        ${c.content}
+            const avatarColor = stringToColor(post.user);
+            const myLikes = JSON.parse(localStorage.getItem('my_likes') || '[]');
+            const isLiked = myLikes.includes(pid);
+            const likeClass = isLiked ? 'liked' : '';
+
+            let commentsHtml = "";
+            if(post.comments && post.comments.length > 0) {
+                commentsHtml = post.comments.map(c => `
+                    <div class="comment">
+                        <div class="comment-avatar" style="background:${stringToColor(c.user)}">${c.user[0]}</div>
+                        <div class="comment-bubble">
+                            <span class="comment-user">${c.user}</span>
+                            ${c.content}
+                        </div>
                     </div>
-                </div>
-            `).join('');
+                `).join('');
+            }
 
             const html = `
                 <div class="post-card">
@@ -383,7 +275,7 @@
                         <div class="post-avatar" style="background:${avatarColor}">${post.user[0]}</div>
                         <div class="post-info">
                             <h4>${post.user}</h4>
-                            <span>${post.time}</span>
+                            <span>${post.timeStr}</span>
                         </div>
                         <span class="post-tag"># ${post.tag}</span>
                     </div>
@@ -391,76 +283,64 @@
                         ${post.content.replace(/\n/g, '<br>')}
                     </div>
                     <div class="post-actions">
-                        <button class="action-btn ${likeClass}" onclick="toggleLike(${post.id})">
+                        <button class="action-btn ${likeClass}" onclick="toggleLike('${pid}', ${post.likes})">
                             <i class="fas fa-heart"></i> ${post.likes}
                         </button>
-                        <button class="action-btn" onclick="toggleComment(${post.id})">
-                            <i class="fas fa-comment-alt"></i> ${post.comments.length} 留言
+                        <button class="action-btn" onclick="toggleComment('${pid}')">
+                            <i class="fas fa-comment-alt"></i> ${post.comments ? post.comments.length : 0} 留言
                         </button>
-                        <button class="action-btn" onclick="deletePost(${post.id})" style="margin-left:auto; color:#999;">
+                        <button class="action-btn" onclick="deletePost('${pid}', '${post.user}')" style="margin-left:auto; color:#bbb;">
                             <i class="fas fa-trash"></i>
                         </button>
                     </div>
                     
-                    <div class="comments-section" id="comment-box-${post.id}">
-                        <div id="comment-list-${post.id}">${commentsHtml}</div>
+                    <div class="comments-section" id="comment-box-${pid}">
+                        <div id="comment-list-${pid}">${commentsHtml}</div>
                         <div class="comment-input-box">
-                            <input type="text" id="input-${post.id}" placeholder="留言...">
-                            <button class="btn-small" style="background:var(--primary)" onclick="addComment(${post.id})">送出</button>
+                            <input type="text" id="input-${pid}" placeholder="留言...">
+                            <button class="btn-small" style="background:var(--primary)" onclick="addComment('${pid}')">送出</button>
                         </div>
                     </div>
                 </div>
             `;
             feed.innerHTML += html;
         });
-    }
+    });
 
-    // --- 4. 互動功能 ---
-    function toggleLike(id) {
-        const posts = JSON.parse(localStorage.getItem('forum_posts'));
-        const post = posts.find(p => p.id === id);
-        
-        if(post.isLiked) {
-            post.likes--;
-            post.isLiked = false;
+    // 互動功能
+    window.toggleLike = async function(pid, currentLikes) {
+        let myLikes = JSON.parse(localStorage.getItem('my_likes') || '[]');
+        const ref = doc(db, "posts", pid);
+        if(myLikes.includes(pid)) {
+            await updateDoc(ref, { likes: currentLikes - 1 });
+            myLikes = myLikes.filter(id => id !== pid);
         } else {
-            post.likes++;
-            post.isLiked = true;
+            await updateDoc(ref, { likes: currentLikes + 1 });
+            myLikes.push(pid);
         }
-        localStorage.setItem('forum_posts', JSON.stringify(posts));
-        renderFeed();
+        localStorage.setItem('my_likes', JSON.stringify(myLikes));
     }
 
-    function toggleComment(id) {
-        const box = document.getElementById(`comment-box-${id}`);
-        box.classList.toggle('show');
-    }
-
-    function addComment(id) {
-        const input = document.getElementById(`input-${id}`);
+    window.addComment = async function(pid) {
+        const input = document.getElementById(`input-${pid}`);
         const val = input.value.trim();
         if(!val) return;
-
-        const posts = JSON.parse(localStorage.getItem('forum_posts'));
-        const post = posts.find(p => p.id === id);
-        
-        post.comments.push({
-            user: currentUser,
-            content: val
-        });
-        
-        localStorage.setItem('forum_posts', JSON.stringify(posts));
-        renderFeed();
-        // 保持留言區開啟
-        setTimeout(() => document.getElementById(`comment-box-${id}`).classList.add('show'), 50);
+        const ref = doc(db, "posts", pid);
+        try {
+            await updateDoc(ref, {
+                comments: arrayUnion({ user: currentUser, content: val, time: Date.now() })
+            });
+            input.value = ""; 
+        } catch(e) { console.error(e); }
     }
 
-    function deletePost(id) {
-        if(!confirm("確定要刪除這篇貼文嗎？")) return;
-        let posts = JSON.parse(localStorage.getItem('forum_posts'));
-        posts = posts.filter(p => p.id !== id);
-        localStorage.setItem('forum_posts', JSON.stringify(posts));
-        renderFeed();
+    window.toggleComment = function(pid) {
+        document.getElementById(`comment-box-${pid}`).classList.toggle('show');
+    }
+
+    window.deletePost = async function(pid, author) {
+        if(!confirm(`確定要刪除這篇貼文嗎？`)) return;
+        try { await deleteDoc(doc(db, "posts", pid)); } catch(e) { alert("刪除失敗"); }
     }
 </script>
 
