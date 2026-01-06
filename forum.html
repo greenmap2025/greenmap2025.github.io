@@ -149,26 +149,27 @@
 </div>
 
 <script type="module">
-    // ⚠️ 這裡使用你在截圖二看到的 CDN 方式引入，版本使用穩定的 10.12.0
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, onSnapshot, updateDoc, doc, arrayUnion, orderBy, query, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    // ⚠️ 1. 引入 Firebase (使用新專案支援的版本 12.7.0)
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, onSnapshot, updateDoc, doc, arrayUnion, orderBy, query, deleteDoc } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
-    // ⚠️ 這裡已更新為你截圖中的正確設定 (appId: ...b6e4a5...)
+    // ⚠️ 2. 這是從你圖片 (image_0a1c28.png) 抄下來的 [新專案] 設定
+    // 專案 ID: greenmap-6b040
     const firebaseConfig = {
-      apiKey: "AIzaSyDFfPxs5gXDcjLxQGGCQUm_aaNdXc6pdto",
-      authDomain: "greenmap2025-e0c58.firebaseapp.com",
-      projectId: "greenmap2025-e0c58",
-      storageBucket: "greenmap2025-e0c58.firebasestorage.app",
-      messagingSenderId: "712824475160",
-      appId: "1:712824475160:web:b6e4a53bbc74e23e3f3d6d",
-      measurementId: "G-LPVWMH69E2"
+      apiKey: "AIzaSyAG-kBQFQnGX9MtJui-CuGcBDksZ5qzNAU",
+      authDomain: "greenmap-6b040.firebaseapp.com",
+      projectId: "greenmap-6b040",
+      storageBucket: "greenmap-6b040.firebasestorage.app",
+      messagingSenderId: "621385318712",
+      appId: "1:621385318712:web:a19782dd4c27f1f03d81cd"
     };
+    //
   
-    // 初始化 Firebase
+    // 3. 啟動 Firebase
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
   
-    // --- 以下程式邏輯維持不變 ---
+    // --- 以下邏輯保持不變 ---
     let currentUser = localStorage.getItem('forum_user') || '訪客';
     let currentTag = '心得';
     
@@ -177,7 +178,6 @@
     nameInput.value = currentUser;
     updateAvatarUI(currentUser);
 
-    // 將功能掛載到 window，讓 HTML onclick 可以呼叫
     window.saveUsername = function() {
         const name = nameInput.value.trim();
         if(!name) return alert("請輸入暱稱！");
@@ -228,7 +228,7 @@
             document.getElementById('postContent').value = "";
         } catch (e) {
             console.error("發文錯誤: ", e);
-            alert("發送失敗！請檢查 Console (F12) 的錯誤訊息，如果顯示 'Missing or insufficient permissions'，請去 Firebase Console 開啟 Firestore Rules。");
+            alert("發送失敗！請檢查 Console (F12) 錯誤訊息。");
         }
         btn.disabled = false;
         btn.innerText = "發布貼文";
@@ -306,10 +306,13 @@
         });
     }, (error) => {
         console.error("讀取失敗:", error);
-        document.getElementById('feedArea').innerHTML = `<div class="empty-state" style="color:red">讀取失敗：權限不足 (Permission Denied)。<br>請到 Firebase Console -> Firestore Database -> Rules 分頁，將 allow read, write 設為 true。</div>`;
+        // 這裡幫你加了檢查提示
+        document.getElementById('feedArea').innerHTML = `<div class="empty-state" style="color:red">
+            讀取失敗。<br>
+            請確認你是否已在 Firebase Console 的「綠色地圖」專案中建立了 Firestore 資料庫。
+        </div>`;
     });
 
-    // 互動功能
     window.toggleLike = async function(pid, currentLikes) {
         let myLikes = JSON.parse(localStorage.getItem('my_likes') || '[]');
         const ref = doc(db, "posts", pid);
